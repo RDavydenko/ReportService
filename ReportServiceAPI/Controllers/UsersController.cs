@@ -16,9 +16,19 @@ namespace ReportServiceAPI.Controllers
 	[ApiController]
 	public class UsersController : Controller
 	{
-		public UsersController()
+		private readonly ServiceDbContext _db;
+
+		public UsersController(ServiceDbContext db)
 		{
-			
+			_db = db;
+		}
+
+		[HttpGet]
+		public IActionResult Get()
+		{
+			_db.Users.Count();
+			_db.Users.Add(new User { Email = "admin@mail.ru", Name = "Вася", Surname = "Васин" });
+			return Content("abc");
 		}
 	}
 }
