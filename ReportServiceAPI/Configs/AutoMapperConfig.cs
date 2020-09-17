@@ -68,7 +68,9 @@ namespace ReportServiceAPI.Configs
 		{
 			cfg.CreateMap<ReportDTO, Report>()
 				// Создаем нового пользователя с полем Id из ReportDTO.UserId
-				.ForMember(x => x.User, opt => opt.MapFrom(x => new User { Id = x.UserId.GetValueOrDefault() }));
+				.ForMember(x => x.User, opt => opt.MapFrom(x => new User { Id = x.UserId.GetValueOrDefault() }))
+				// Если в Date NULL, то берем системное время, иначе время, указанное в Date
+				.ForMember(x => x.Date, opt => opt.MapFrom((rDTO, r) => rDTO.Date.HasValue ? rDTO.Date.Value : DateTime.Now));				
 		}));
 
 		/// <summary>

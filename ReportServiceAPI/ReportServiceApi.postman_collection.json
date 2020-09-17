@@ -1,0 +1,333 @@
+{
+	"info": {
+		"_postman_id": "3d20b74b-c2ad-4709-9313-71c74ef2d030",
+		"name": "ReportServiceApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "https://localhost:44375/api/users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44375/api/users/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						},
+						"description": "Получаем список идентификаторов всех пользователей."
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/users/1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44375/api/users/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						},
+						"description": "Получаем детальную информацию о пользователе с идентификатором 1."
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/users/add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {       \r\n    \"email\": \"admin3@mail.ru\",\r\n    \"name\": \"Имя\",\r\n    \"surname\": \"Фамилия\",\r\n    \"patronymic\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44375/api/users/add",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"users",
+								"add"
+							]
+						},
+						"description": "Добавляем нового пользователя."
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/users/1/edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {  \r\n    \"email\": \"admin@mail.ru\",\r\n    \"name\": \"Имя\",\r\n    \"surname\": \"Фамилия\",\r\n    \"patronymic\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44375/api/users/1/edit",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"users",
+								"1",
+								"edit"
+							]
+						},
+						"description": "Изменяем информацию о пользователе с идентификатором 1."
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/users/1/delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44375/api/users/1/delete",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"users",
+								"1",
+								"delete"
+							]
+						},
+						"description": "Удаляем пользователя с идентификатором 1."
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/users/1/reports?month=9",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44375/api/users/1/reports?month=9",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"users",
+								"1",
+								"reports"
+							],
+							"query": [
+								{
+									"key": "month",
+									"value": "9"
+								}
+							]
+						},
+						"description": "Получаем список идентификаторов отчетов пользователя с Id=1 за 9 месяц (сентябрь)."
+					},
+					"response": []
+				}
+			],
+			"description": "Содержит запросы, связанные с контроллером UsersController.",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "https://localhost:44375/api/reports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44375/api/reports",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"reports"
+							]
+						},
+						"description": "Получаем список идентификаторов всех отчетов"
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/reports/2",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44375/api/reports/2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"reports",
+								"2"
+							]
+						},
+						"description": "Получаем детальную информацию об отчете с идентификатором 2."
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/reports/add",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"remark\": \"Заметка 4\",\r\n    \"hours\": 3,\r\n    \"userId\": 1\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44375/api/reports/add",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"reports",
+								"add"
+							]
+						},
+						"description": "Добавляем новый отчет."
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/reports/5/edit",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"remark\": \"Заметка 4 (изменено)\",\r\n    \"hours\": 3,\r\n    \"userId\": 1\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44375/api/reports/5/edit",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"reports",
+								"5",
+								"edit"
+							]
+						},
+						"description": "Изменяем отчет с идентификатором 5."
+					},
+					"response": []
+				},
+				{
+					"name": "https://localhost:44375/api/reports/5/delete",
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"remark\": \"Заметка 4 (изменено)\",\r\n    \"hours\": 3,\r\n    \"userId\": 1\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44375/api/reports/5/delete",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44375",
+							"path": [
+								"api",
+								"reports",
+								"5",
+								"delete"
+							]
+						},
+						"description": "Удаляем отчет с идентификатором 5."
+					},
+					"response": []
+				}
+			],
+			"description": "Содержит запросы, связанные с контроллером ReportsController.",
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

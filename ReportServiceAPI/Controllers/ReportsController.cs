@@ -162,7 +162,12 @@ namespace ReportServiceAPI.Controllers
 
 				report.Remark = editedReport.Remark;
 				report.Hours = editedReport.Hours;
-				report.Date = editedReport.Date;
+				// Добавляем дату только, если она была передана в теле запроса, иначе добавится системное время
+				// Можно и не добавлять эту проверку, если цель - изменять время на время редактирования
+				if (reportDTO.Date.HasValue)
+				{
+					report.Date = editedReport.Date; 
+				}
 				report.User = user;
 				
 				_db.Reports.Update(report);

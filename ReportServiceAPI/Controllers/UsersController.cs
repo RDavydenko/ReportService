@@ -93,6 +93,7 @@ namespace ReportServiceAPI.Controllers
 				var mapper = new Mapper(config);
 
 				var user = mapper.Map<User>(userDTO);
+				user.Id = default; // Зануляем Id, чтобы БД не ругалась на то, что такой Id уже существует (рассчитает его сама БД)
 
 				// Можем добавить, только если Email уникальный (не существует подобный в БД)
 				bool isEmailUnique = _db.Users.Any(u => u.Email == user.Email) == false;

@@ -34,8 +34,7 @@ namespace ReportServiceAPI.DTOs
 		/// <summary>
 		/// Дата
 		/// </summary>
-		[Required]
-		public DateTime Date { get; set; }
+		public DateTime? Date { get; set; }
 
 		/// <summary>
 		/// Идентификатор пользователя, которому принадлежит отчет
