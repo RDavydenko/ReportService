@@ -28,7 +28,7 @@ namespace ReportServiceAPI
 		public void ConfigureServices(IServiceCollection services)
 		{
 			string connection = Configuration.GetConnectionString("DefaultConnection"); // строка подключения к БД Postgres
-			
+
 			services.AddDbContext<ServiceDbContext>(builder =>
 			{
 				builder.UseNpgsql(connection, npgsqlBuilder =>
@@ -53,7 +53,7 @@ namespace ReportServiceAPI
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
-			app.UseHttpsRedirection();			
+			app.UseHttpsRedirection();
 
 			app.UseRouting();
 

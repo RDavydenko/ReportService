@@ -28,7 +28,7 @@ namespace ReportServiceAPI.Configs
 			}
 		}
 
-		private static Lazy<IConfigurationProvider> _fromUserDTOToUser= new Lazy<IConfigurationProvider>(new MapperConfiguration(cfg => cfg.CreateMap<UserDTO, User>()));
+		private static Lazy<IConfigurationProvider> _fromUserDTOToUser = new Lazy<IConfigurationProvider>(new MapperConfiguration(cfg => cfg.CreateMap<UserDTO, User>()));
 
 		/// <summary>
 		/// Конфигурация для перехода из <see cref="UserDTO"/> в <see cref="User"/>
@@ -38,6 +38,45 @@ namespace ReportServiceAPI.Configs
 			get
 			{
 				return _fromUserDTOToUser.Value;
+			}
+		}
+
+		private static Lazy<IConfigurationProvider> _fromReportToReportDTO = new Lazy<IConfigurationProvider>(new MapperConfiguration(cfg =>
+		{
+			cfg.CreateMap<Report, ReportDTO>()
+				.ForMember(x => x.UserId, opt =>
+				{
+					opt.Condition(x => x.User != null);
+					opt.MapFrom(x => x.User.Id);
+				});
+
+		}));
+
+		/// <summary>
+		/// Конфигурация для перехода из <see cref="Report"/> в <see cref="ReportDTO"/>
+		/// </summary>
+		public static IConfigurationProvider FromReportToReportDTO
+		{
+			get
+			{
+				return _fromReportToReportDTO.Value;
+			}
+		}
+
+		private static Lazy<IConfigurationProvider> _fromReportDTOToReport = new Lazy<IConfigurationProvider>(new MapperConfiguration(cfg =>
+		{
+			cfg.CreateMap<ReportDTO, Report>()
+				.ForMember(x => x.User, opt => opt.MapFrom(x => new User { Id = x.UserId.GetValueOrDefault() }));
+		}));
+
+		/// <summary>
+		/// Конфигурация для перехода из <see cref="ReportDTO"/> в <see cref="Report"/>
+		/// </summary>
+		public static IConfigurationProvider FromReportDTOToReport
+		{
+			get
+			{
+				return _fromReportDTOToReport.Value;
 			}
 		}
 	}

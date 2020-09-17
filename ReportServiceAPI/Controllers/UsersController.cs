@@ -158,7 +158,7 @@ namespace ReportServiceAPI.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if(id.HasValue == false)
+				if (id.HasValue == false)
 				{
 					return new JsonResult(
 						   new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
@@ -172,7 +172,7 @@ namespace ReportServiceAPI.Controllers
 						new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
 					);
 				}
-				
+
 				_db.Users.Remove(user);
 				await _db.SaveChangesAsync();
 
@@ -182,6 +182,52 @@ namespace ReportServiceAPI.Controllers
 			}
 			return new JsonResult(
 					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
+				);
+		}
+
+		[HttpGet]
+		[Route("{id}/reports")]
+		public async Task<IActionResult> GetReportsByMonth(int? id, int? month, int year = 2020)
+		{
+			if (id.HasValue == false)
+			{
+				return new JsonResult(
+						   new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
+					   );
+			}
+
+			if (month.HasValue == false || month <= 0 || month > 12)
+			{
+				return new JsonResult(
+						   new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(month) }
+					   );
+			}
+
+			if (year < 0)
+			{
+				return new JsonResult(
+						   new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(year) }
+					   );
+			}
+
+			DateTime firstDayOfMonth = new DateTime(year, month.Value, 1);
+			int days = DateTime.DaysInMonth(year, month.Value);
+			DateTime lastDayOfMonth = new DateTime(year, month.Value, days, hour: 23, minute: 59, second: 59);
+
+			var user = await _db.Users.Include(u => u.Reports).Where(u => u.Id == id.Value).FirstOrDefaultAsync();
+			if (user == null)
+			{
+				return new JsonResult(
+						new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
+					);
+			}
+
+			var reports = user.Reports.Where(r => r.Date >= firstDayOfMonth && r.Date <= lastDayOfMonth).ToList();
+			var mapper = new Mapper(AutoMapperConfig.FromReportToReportDTO);
+			var reportsDTO = mapper.Map<IEnumerable<ReportDTO>>(reports);
+
+			return new JsonResult(
+					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportsDTO }
 				);
 		}
 	}
