@@ -94,6 +94,7 @@ namespace ReportServiceAPI.Controllers
 
 				var user = mapper.Map<User>(userDTO);
 
+				// Можем добавить, только если Email уникальный (не существует подобный в БД)
 				bool isEmailUnique = _db.Users.Any(u => u.Email == user.Email) == false;
 				if (isEmailUnique == false)
 				{
@@ -147,7 +148,8 @@ namespace ReportServiceAPI.Controllers
 				var mapper = new Mapper(config);
 				var editedModel = mapper.Map<User>(userDTO);
 
-				bool isEmailUnique = _db.Users.Any(u => u.Email == editedModel.Email) == false;
+				// Можем сменить, только на уникальный Email (не существует подобный в БД)
+				bool isEmailUnique = _db.Users.Any(u => u.Email == editedModel.Email && u.Id != user.Id) == false;
 				if (isEmailUnique == false)
 				{
 					return new JsonResult(
@@ -244,6 +246,7 @@ namespace ReportServiceAPI.Controllers
 					   );
 			}
 
+			// Рассчитываем начальный и конечный день указанного месяца
 			DateTime firstDayOfMonth = new DateTime(year, month.Value, 1);
 			int days = DateTime.DaysInMonth(year, month.Value);
 			DateTime lastDayOfMonth = new DateTime(year, month.Value, days, hour: 23, minute: 59, second: 59);
@@ -256,6 +259,7 @@ namespace ReportServiceAPI.Controllers
 					);
 			}
 
+			// Отчеты, которые были написаны в указанном месяце (с 1 по последний день включительно)
 			var reportIds = user.Reports.Where(r => r.Date >= firstDayOfMonth && r.Date <= lastDayOfMonth).Select(x=>new { x.Id }).ToList();			
 
 			return new JsonResult(

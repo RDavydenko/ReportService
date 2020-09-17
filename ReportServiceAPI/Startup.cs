@@ -35,7 +35,7 @@ namespace ReportServiceAPI
 				// Postrgres
 				builder.UseNpgsql(connection, npgsqlBuilder =>
 				{
-
+					
 				});
 			});
 

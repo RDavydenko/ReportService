@@ -60,7 +60,8 @@ namespace ReportServiceAPI.Controllers
 					);
 			}
 
-			var report = await _db.Reports.Include(x => x.User)
+			var report = await _db.Reports
+				.Include(x => x.User)
 				.Where(x => x.Id == id.Value)
 				.FirstOrDefaultAsync();
 			if (report == null)
@@ -94,7 +95,7 @@ namespace ReportServiceAPI.Controllers
 				var mapper = new Mapper(config);
 
 				var report = mapper.Map<Report>(reportDTO);
-				report.Id = default;
+				report.Id = default; // Зануляем Id, чтобы БД не ругалась на то, что такой Id уже существует (рассчитает его сама БД)
 
 				var user = await _db.Users.Where(u => u.Id == report.User.Id).FirstOrDefaultAsync();
 				if (user == null)
