@@ -21,6 +21,7 @@ namespace ReportServiceAPI.Models
 		/// Адрес электронной почты
 		/// </summary>
 		[Required]
+		[EmailAddress]
 		public string Email { get; set; }
 
 		/// <summary>

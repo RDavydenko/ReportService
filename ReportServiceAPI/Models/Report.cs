@@ -27,6 +27,7 @@ namespace ReportServiceAPI.Models
 		/// Количество часов
 		/// </summary>
 		[Required]
+		[Range(minimum: 0, maximum: int.MaxValue)]
 		public int Hours { get; set; }
 
 		/// <summary>
