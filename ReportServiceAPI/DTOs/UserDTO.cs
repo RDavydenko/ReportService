@@ -39,5 +39,12 @@ namespace ReportServiceAPI.DTOs
 		/// Отчество (необязательно)
 		/// </summary>
 		public string Patronymic { get; set; }
+
+		/// <summary>
+		/// Конструктор по умолчанию
+		/// </summary>
+		public UserDTO()
+		{
+		}
 	}
 }

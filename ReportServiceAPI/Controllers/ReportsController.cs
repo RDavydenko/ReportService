@@ -16,6 +16,9 @@ using ReportServiceAPI.Models;
 
 namespace ReportServiceAPI.Controllers
 {
+	/// <summary>
+	/// Контроллер для работы с отчетами
+	/// </summary>
 	[Produces("application/json")]
 	[Route("api/[controller]")]
 	[ApiController]
@@ -28,6 +31,10 @@ namespace ReportServiceAPI.Controllers
 			_db = db;
 		}
 
+		/// <summary>
+		/// Получить список отчетов
+		/// </summary>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов отчетов</returns>
 		[HttpGet]
 		public async Task<IActionResult> GetReports()
 		{
@@ -37,6 +44,11 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
+		/// <summary>
+		/// Получить детальную информацию об отчете
+		/// </summary>
+		/// <param name="id">Идентификатор отчета</param>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO отчета <see cref="ReportDTO"/></returns>
 		[HttpGet]
 		[Route("{id}")]
 		public async Task<IActionResult> GetReport(int? id)
@@ -67,6 +79,11 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
+		/// <summary>
+		/// Добавить новый отчет
+		/// </summary>
+		/// <param name="reportDTO">Объект типа <see cref="ReportDTO"/></param>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO добавленного отчета <see cref="ReportDTO"/></returns>
 		[HttpPost]
 		[Route("add")]
 		public async Task<IActionResult> AddReport(ReportDTO reportDTO)
@@ -103,6 +120,12 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
+		/// <summary>
+		/// Редактировать данные отчета
+		/// </summary>
+		/// <param name="id">Идентификатор отчета</param>
+		/// <param name="reportDTO">Объект типа <see cref="ReportDTO"/></param>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO отредактированного отчета <see cref="ReportDTO"/></returns>
 		[HttpPost]
 		[Route("{id}/edit")]
 		public async Task<IActionResult> EditReport(int? id, ReportDTO reportDTO)
@@ -155,7 +178,11 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
-
+		/// <summary>
+		/// Удалить отчет
+		/// </summary>
+		/// <param name="id">Идентификатор отчета</param>
+		/// <returns><see cref="Response"/></returns>
 		[HttpPost]
 		[Route("{id}/delete")]
 		public async Task<IActionResult> DeleteReport(int? id)

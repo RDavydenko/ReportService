@@ -39,5 +39,12 @@ namespace ReportServiceAPI.Models
 		/// Пользователь, которому принадлежит отчет
 		/// </summary>
 		public User User { get; set; }
+
+		/// <summary>
+		/// Конструктор по умолчанию
+		/// </summary>
+		public Report()
+		{
+		}
 	}
 }

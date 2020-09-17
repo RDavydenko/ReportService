@@ -29,8 +29,10 @@ namespace ReportServiceAPI
 		{
 			string connection = Configuration.GetConnectionString("DefaultConnection"); // строка подключения к БД Postgres
 
+			// Добавляем DB контекст
 			services.AddDbContext<ServiceDbContext>(builder =>
 			{
+				// Postrgres
 				builder.UseNpgsql(connection, npgsqlBuilder =>
 				{
 

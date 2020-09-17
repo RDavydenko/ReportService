@@ -16,6 +16,9 @@ using ReportServiceAPI.Models;
 
 namespace ReportServiceAPI.Controllers
 {
+	/// <summary>
+	/// Контроллер для работы с пользователями
+	/// </summary>
 	[Produces("application/json")]
 	[Route("api/[controller]")]
 	[ApiController]
@@ -28,6 +31,10 @@ namespace ReportServiceAPI.Controllers
 			_db = db;
 		}
 
+		/// <summary>
+		/// Получить список пользователей
+		/// </summary>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов пользователей</returns>
 		[HttpGet]
 		public async Task<IActionResult> GetUsers()
 		{
@@ -38,6 +45,11 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
+		/// <summary>
+		/// Получить детальную информацию о пользователе
+		/// </summary>
+		/// <param name="id">Идентификатор пользователя</param>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO пользователя <see cref="UserDTO"/></returns>
 		[HttpGet]
 		[Route("{id}")]
 		public async Task<IActionResult> GetUser(int? id)
@@ -66,6 +78,11 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
+		/// <summary>
+		/// Добавить нового пользователя
+		/// </summary>
+		/// <param name="userDTO">Объект типа <see cref="UserDTO"/></param>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO добавленного пользователя <see cref="UserDTO"/></returns>
 		[HttpPost]
 		[Route("add")]
 		public async Task<IActionResult> AddUser(UserDTO userDTO)
@@ -99,6 +116,12 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
+		/// <summary>
+		/// Редактировать данные пользователя
+		/// </summary>
+		/// <param name="id">Идентификатор пользователя</param>
+		/// <param name="userDTO">Объект типа <see cref="UserDTO"/></param>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO отредактированного пользователя <see cref="UserDTO"/></returns>
 		[HttpPost]
 		[Route("{id}/edit")]
 		public async Task<IActionResult> EditUser(int? id, UserDTO userDTO)
@@ -151,7 +174,11 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
-
+		/// <summary>
+		/// Удалить пользователя
+		/// </summary>
+		/// <param name="id">Идентификатор пользователя</param>
+		/// <returns><see cref="Response"/></returns>
 		[HttpPost]
 		[Route("{id}/delete")]
 		public async Task<IActionResult> DeleteUser(int? id)
@@ -185,6 +212,13 @@ namespace ReportServiceAPI.Controllers
 				);
 		}
 
+		/// <summary>
+		/// Получить список идентификаторов отчетов пользователя за месяц
+		/// </summary>
+		/// <param name="id">Идентификатор пользователя</param>
+		/// <param name="month">Месяц</param>
+		/// <param name="year">Год (по умолчанию 2020)</param>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов отчетов</returns>
 		[HttpGet]
 		[Route("{id}/reports")]
 		public async Task<IActionResult> GetReportsByMonth(int? id, int? month, int year = 2020)
@@ -222,12 +256,10 @@ namespace ReportServiceAPI.Controllers
 					);
 			}
 
-			var reports = user.Reports.Where(r => r.Date >= firstDayOfMonth && r.Date <= lastDayOfMonth).ToList();
-			var mapper = new Mapper(AutoMapperConfig.FromReportToReportDTO);
-			var reportsDTO = mapper.Map<IEnumerable<ReportDTO>>(reports);
+			var reportIds = user.Reports.Where(r => r.Date >= firstDayOfMonth && r.Date <= lastDayOfMonth).Select(x=>new { x.Id }).ToList();			
 
 			return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportsDTO }
+					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportIds }
 				);
 		}
 	}

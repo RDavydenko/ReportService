@@ -32,19 +32,24 @@ namespace ReportServiceAPI.Models
 		{
 			modelBuilder.Entity<User>(builder =>
 			{
+				// PK - Id
 				builder.HasKey(u => u.Id);
 
+				// Email - уникальный
 				builder.HasIndex(u => u.Email).IsUnique(true);
 			});
 
 			modelBuilder.Entity<Report>(builder =>
 			{
+				// PK - Id
 				builder.HasKey(r => r.Id);
 
+				// User (1) ко многим Reports. При удалении User - удаляются все связанные Reports
 				builder.HasOne(r => r.User)
 						.WithMany(u => u.Reports)
 						.OnDelete(DeleteBehavior.Cascade);
 
+				// Default Report.Date 
 				builder.Property(r => r.Date)
 						.HasDefaultValueSql("now()::timestamp");
 			});

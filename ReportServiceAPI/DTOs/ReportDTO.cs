@@ -41,5 +41,12 @@ namespace ReportServiceAPI.DTOs
 		/// Идентификатор пользователя, которому принадлежит отчет
 		/// </summary>
 		public int? UserId { get; set; }
+
+		/// <summary>
+		/// Конструктор по умолчанию
+		/// </summary>
+		public ReportDTO()
+		{
+		}
 	}
 }

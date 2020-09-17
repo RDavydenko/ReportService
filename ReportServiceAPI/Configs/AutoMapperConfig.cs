@@ -46,6 +46,7 @@ namespace ReportServiceAPI.Configs
 			cfg.CreateMap<Report, ReportDTO>()
 				.ForMember(x => x.UserId, opt =>
 				{
+					// Если User не NULL, то записываем в поле UserId значение User.Id
 					opt.Condition(x => x.User != null);
 					opt.MapFrom(x => x.User.Id);
 				});
@@ -66,6 +67,7 @@ namespace ReportServiceAPI.Configs
 		private static Lazy<IConfigurationProvider> _fromReportDTOToReport = new Lazy<IConfigurationProvider>(new MapperConfiguration(cfg =>
 		{
 			cfg.CreateMap<ReportDTO, Report>()
+				// Создаем нового пользователя с полем Id из ReportDTO.UserId
 				.ForMember(x => x.User, opt => opt.MapFrom(x => new User { Id = x.UserId.GetValueOrDefault() }));
 		}));
 
