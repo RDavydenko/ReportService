@@ -37,11 +37,20 @@ namespace ReportServiceAPI.Controllers
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов отчетов</returns>
 		[HttpGet]
 		public async Task<IActionResult> GetReports()
-		{
-			var reportIds = await _db.Reports.Select(r => new { r.Id }).ToListAsync();
-			return new JsonResult(
-				new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportIds }
+		{			
+			try
+			{
+				var reportIds = await _db.Reports.Select(r => new { r.Id }).ToListAsync();
+				return new JsonResult(
+					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportIds }
 				);
+			}
+			catch (TimeoutException)
+			{
+				return new JsonResult(
+					new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
+				);
+			}			
 		}
 
 		/// <summary>
@@ -50,11 +59,11 @@ namespace ReportServiceAPI.Controllers
 		/// <param name="id">Идентификатор отчета</param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO отчета <see cref="ReportDTO"/></returns>
 		[HttpGet]
-		[Route("{id}")]
+		[Route("{id}")]		
 		public async Task<IActionResult> GetReport(int? id)
 		{
 			if (id.HasValue == false)
-			{
+			{				
 				return new JsonResult(
 					new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
 					);
@@ -72,8 +81,8 @@ namespace ReportServiceAPI.Controllers
 			}
 
 			var config = AutoMapperConfig.FromReportToReportDTO;
-			var mapper = new Mapper(config);
-
+			var mapper = new Mapper(config);		
+			
 			var reportDTO = mapper.Map<ReportDTO>(report);
 			return new JsonResult(
 				new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportDTO }
@@ -151,6 +160,7 @@ namespace ReportServiceAPI.Controllers
 				var config = AutoMapperConfig.FromReportDTOToReport;
 				var mapper = new Mapper(config);
 				var editedReport = mapper.Map<Report>(reportDTO);
+
 
 				var user = await _db.Users.Where(u => u.Id == editedReport.User.Id).FirstOrDefaultAsync();
 				if (user == null)

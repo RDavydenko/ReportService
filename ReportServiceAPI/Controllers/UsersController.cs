@@ -252,8 +252,9 @@ namespace ReportServiceAPI.Controllers
 			int days = DateTime.DaysInMonth(year, month.Value);
 			DateTime lastDayOfMonth = new DateTime(year, month.Value, days, hour: 23, minute: 59, second: 59);
 
-			var user = await _db.Users.Include(u => u.Reports).Where(u => u.Id == id.Value).FirstOrDefaultAsync();
-			if (user == null)
+			// Существует пользователь или нет
+			bool isUserExist = _db.Users.Any(x => x.Id == id.Value);
+			if (isUserExist == false)
 			{
 				return new JsonResult(
 						new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
@@ -261,7 +262,11 @@ namespace ReportServiceAPI.Controllers
 			}
 
 			// Отчеты, которые были написаны в указанном месяце (с 1 по последний день включительно)
-			var reportIds = user.Reports.Where(r => r.Date >= firstDayOfMonth && r.Date <= lastDayOfMonth).Select(x=>new { x.Id }).ToList();			
+			var reportIds = await _db.Reports
+				.Include(x => x.User)
+				.Where(x => x.User.Id == id.Value && x.Date >= firstDayOfMonth && x.Date <= lastDayOfMonth)
+				.Select(x => new { x.Id })
+				.ToListAsync();
 
 			return new JsonResult(
 					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportIds }
