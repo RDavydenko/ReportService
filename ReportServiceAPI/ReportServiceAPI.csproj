@@ -20,8 +20,13 @@
 
   <ItemGroup>
     <Folder Include="devops\" />
-    <Folder Include="documentation\" />
     <Folder Include="resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="documentation\redoc.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

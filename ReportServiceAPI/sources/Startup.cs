@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
@@ -20,9 +22,14 @@ namespace ReportServiceAPI
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public Startup(IWebHostEnvironment env)
 		{
-			Configuration = configuration;
+			// Настраиваем файл конфигурации (его местоположение и название)
+			var builder = new ConfigurationBuilder()
+				.SetBasePath(Path.Combine(env.ContentRootPath, "sources"))
+				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+			Configuration = builder.Build();
 		}
 
 		public IConfiguration Configuration { get; }
