@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 using ReportServiceAPI.Models;
 
@@ -40,6 +43,22 @@ namespace ReportServiceAPI
 			});
 
 			services.AddControllers();
+
+			services.AddSwaggerGen(opt =>
+			{
+				opt.SwaggerDoc("v1", new OpenApiInfo()
+				{ 
+					Version = "v1",
+					Title = "ReportServiceAPI",
+					Description = "REST API сервис дл€ учета отработанного времени.",
+
+				});
+
+				// ƒобавл€ем xml комментарии из документации
+				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+				opt.IncludeXmlComments(xmlPath);
+			});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +75,12 @@ namespace ReportServiceAPI
 				app.UseHsts();
 			}
 			app.UseHttpsRedirection();
+
+			app.UseSwagger();
+			app.UseSwaggerUI(opt =>
+			{
+				opt.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+			});
 
 			app.UseRouting();
 
