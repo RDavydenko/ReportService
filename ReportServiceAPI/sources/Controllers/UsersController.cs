@@ -35,6 +35,7 @@ namespace ReportServiceAPI.Controllers
 		/// Получить список пользователей
 		/// </summary>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов пользователей</returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpGet]
 		public async Task<IActionResult> GetUsers()
 		{
@@ -50,6 +51,7 @@ namespace ReportServiceAPI.Controllers
 		/// </summary>
 		/// <param name="id">Идентификатор пользователя</param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO пользователя <see cref="UserDTO"/></returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpGet]
 		[Route("{id}")]
 		public async Task<IActionResult> GetUser(int? id)
@@ -83,6 +85,7 @@ namespace ReportServiceAPI.Controllers
 		/// </summary>
 		/// <param name="userDTO">Объект типа <see cref="UserDTO"/></param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO добавленного пользователя <see cref="UserDTO"/></returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpPost]
 		[Route("add")]
 		public async Task<IActionResult> AddUser(UserDTO userDTO)
@@ -124,6 +127,7 @@ namespace ReportServiceAPI.Controllers
 		/// <param name="id">Идентификатор пользователя</param>
 		/// <param name="userDTO">Объект типа <see cref="UserDTO"/></param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO отредактированного пользователя <see cref="UserDTO"/></returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpPost]
 		[Route("{id}/edit")]
 		public async Task<IActionResult> EditUser(int? id, UserDTO userDTO)
@@ -182,6 +186,7 @@ namespace ReportServiceAPI.Controllers
 		/// </summary>
 		/// <param name="id">Идентификатор пользователя</param>
 		/// <returns><see cref="Response"/></returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpPost]
 		[Route("{id}/delete")]
 		public async Task<IActionResult> DeleteUser(int? id)
@@ -223,6 +228,7 @@ namespace ReportServiceAPI.Controllers
 		/// <param name="year">Год (по умолчанию 2020)</param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов отчетов</returns>
 		[HttpGet]
+		[ProducesResponseType(typeof(Response), 200)]
 		[Route("{id}/reports")]
 		public async Task<IActionResult> GetReportsByMonth(int? id, int? month, int year = 2020)
 		{

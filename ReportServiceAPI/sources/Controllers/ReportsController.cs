@@ -35,6 +35,7 @@ namespace ReportServiceAPI.Controllers
 		/// Получить список отчетов
 		/// </summary>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов отчетов</returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpGet]
 		public async Task<IActionResult> GetReports()
 		{			
@@ -58,6 +59,7 @@ namespace ReportServiceAPI.Controllers
 		/// </summary>
 		/// <param name="id">Идентификатор отчета</param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO отчета <see cref="ReportDTO"/></returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpGet]
 		[Route("{id}")]		
 		public async Task<IActionResult> GetReport(int? id)
@@ -94,6 +96,7 @@ namespace ReportServiceAPI.Controllers
 		/// </summary>
 		/// <param name="reportDTO">Объект типа <see cref="ReportDTO"/></param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO добавленного отчета <see cref="ReportDTO"/></returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpPost]
 		[Route("add")]
 		public async Task<IActionResult> AddReport(ReportDTO reportDTO)
@@ -136,8 +139,9 @@ namespace ReportServiceAPI.Controllers
 		/// <param name="id">Идентификатор отчета</param>
 		/// <param name="reportDTO">Объект типа <see cref="ReportDTO"/></param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO отредактированного отчета <see cref="ReportDTO"/></returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpPost]
-		[Route("{id}/edit")]
+		[ProducesResponseType(typeof(Response), 200)][Route("{id}/edit")]
 		public async Task<IActionResult> EditReport(int? id, ReportDTO reportDTO)
 		{
 			if (ModelState.IsValid)
@@ -199,6 +203,7 @@ namespace ReportServiceAPI.Controllers
 		/// </summary>
 		/// <param name="id">Идентификатор отчета</param>
 		/// <returns><see cref="Response"/></returns>
+		[ProducesResponseType(typeof(Response), 200)]
 		[HttpPost]
 		[Route("{id}/delete")]
 		public async Task<IActionResult> DeleteReport(int? id)

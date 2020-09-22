@@ -83,7 +83,11 @@ namespace ReportServiceAPI
 			}
 			app.UseHttpsRedirection();
 
-			app.UseSwagger();
+			app.UseSwagger(opt =>
+			{
+				// Версия json 2.0 для корректной работы
+				opt.SerializeAsV2 = true;
+			});
 			app.UseSwaggerUI(opt =>
 			{
 				opt.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
