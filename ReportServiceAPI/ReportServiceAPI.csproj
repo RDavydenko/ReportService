@@ -5,19 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200916124511_Initial.cs" />
-    <Compile Remove="Migrations\20200916124511_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200916124629_Initial.cs" />
-    <Compile Remove="Migrations\20200916124629_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200916125030_Initial.cs" />
-    <Compile Remove="Migrations\20200916125030_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200916125211_Initial.cs" />
-    <Compile Remove="Migrations\20200916125211_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20200916125258_Initial.cs" />
-    <Compile Remove="Migrations\20200916125258_Initial.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="EntityFramework6.Npgsql" Version="6.4.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
@@ -29,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="ReportServiceApi.postman_collection.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Folder Include="devops\" />
+    <Folder Include="documentation\" />
+    <Folder Include="resources\" />
   </ItemGroup>
 
 </Project>

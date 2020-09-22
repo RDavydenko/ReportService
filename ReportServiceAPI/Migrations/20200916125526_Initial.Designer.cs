@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ReportServiceAPI.Models;
 
-namespace ReportServiceAPI.Migrations
+namespace ReportServiceAPI.migrations
 {
     [DbContext(typeof(ServiceDbContext))]
     [Migration("20200916125526_Initial")]
