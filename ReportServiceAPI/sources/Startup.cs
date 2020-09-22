@@ -89,6 +89,15 @@ namespace ReportServiceAPI
 				opt.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 			});
 
+			// Файловый сервер к документации Redoc
+			app.UseFileServer(new FileServerOptions()
+			{
+				FileProvider = new PhysicalFileProvider(
+					Path.Combine(Directory.GetCurrentDirectory(), "documentation")), // Папка documentation
+				RequestPath = "", // При запросе по ссылке: /
+				EnableDefaultFiles = true
+			});
+
 			app.UseRouting();
 
 			app.UseAuthorization();
