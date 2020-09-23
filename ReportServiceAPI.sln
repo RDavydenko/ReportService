@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReportServiceAPI", "ReportServiceAPI\ReportServiceAPI.csproj", "{DEE5E30C-527B-40DA-A764-866904C0EF90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReportServiceAPI", "sources\ReportServiceAPI\ReportServiceAPI.csproj", "{DEE5E30C-527B-40DA-A764-866904C0EF90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sources", "sources", "{BCC58509-060D-414A-BA32-C33A4BF062CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +20,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DEE5E30C-527B-40DA-A764-866904C0EF90} = {BCC58509-060D-414A-BA32-C33A4BF062CD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBD165D1-66F3-46D1-9A08-B94325FE0CCC}

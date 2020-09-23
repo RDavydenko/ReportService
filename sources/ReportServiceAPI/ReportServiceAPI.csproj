@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="devops\**" />
+    <Compile Remove="resources\**" />
+    <Content Remove="devops\**" />
+    <Content Remove="resources\**" />
+    <EmbeddedResource Remove="devops\**" />
+    <EmbeddedResource Remove="resources\**" />
+    <None Remove="devops\**" />
+    <None Remove="resources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="EntityFramework6.Npgsql" Version="6.4.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
@@ -19,12 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="devops\" />
-    <Folder Include="resources\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="documentation\index.html">
+    <None Update="redoc\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
