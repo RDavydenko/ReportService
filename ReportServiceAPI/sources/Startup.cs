@@ -82,6 +82,9 @@ namespace ReportServiceAPI
 
 			// Добавляем webService, работающий с пользователями
 			services.AddScoped<IUserWebService, UserWebService>();
+
+			// Добавляем webService, работающий с отчетами
+			services.AddScoped<IReportWebService, ReportWebService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

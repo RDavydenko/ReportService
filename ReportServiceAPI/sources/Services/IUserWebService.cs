@@ -19,7 +19,7 @@ namespace ReportServiceAPI.sources.Services
 		Task<IEnumerable<IdDTO>> GetUsersIdsAsync();
 
 		/// <summary>
-		/// Возвращает детальную информацию о пользователе или <see langword="null"/>
+		/// Возвращает детальную информацию о пользователе
 		/// </summary>
 		/// <param name="userId">Идентификатор пользователя</param>
 		/// <returns>Модель данных <see cref="UserDTO"/></returns>

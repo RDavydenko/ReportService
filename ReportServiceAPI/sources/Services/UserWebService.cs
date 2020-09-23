@@ -13,7 +13,9 @@ using ReportServiceAPI.sources.Models;
 
 namespace ReportServiceAPI.sources.Services
 {
-
+	/// <summary>
+	/// Реализация сервиса, работающего с пользователем
+	/// </summary>
 	public class UserWebService : IUserWebService
 	{
 		private readonly ServiceDbContext _db;
@@ -27,39 +29,36 @@ namespace ReportServiceAPI.sources.Services
 
 		public async Task<IEnumerable<IdDTO>> GetUsersIdsAsync()
 		{
-			List<User> users = null;
 			try
 			{
-				users = await _db.Users.AsNoTracking().ToListAsync();
+				var users = await _db.Users.AsNoTracking().ToListAsync();
+				var usersDTO = _mapper.Map<IEnumerable<IdDTO>>(users);
+				return usersDTO;
 			}
 			catch
 			{
 				throw;
 			}
-			var usersDTO = _mapper.Map<IEnumerable<IdDTO>>(users);
-			return usersDTO;
 		}
 
 		public async Task<UserDTO> GetUserDetailsAsync(int userId)
 		{
-			User user = null;
 			try
 			{
-				user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == userId);
+				var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == userId);
+				if (user == null)
+				{
+					throw new EntityNotFoundException($"Не найден пользователь с идентификатором {userId}");
+				}
+				else
+				{
+					var userDTO = _mapper.Map<UserDTO>(user);
+					return userDTO;
+				}
 			}
 			catch
 			{
 				throw;
-			}
-
-			if (user == null)
-			{
-				throw new EntityNotFoundException($"Не найден пользователь с идентификатором {userId}");
-			}
-			else
-			{
-				var userDTO = _mapper.Map<UserDTO>(user);
-				return userDTO;
 			}
 		}
 
@@ -72,7 +71,7 @@ namespace ReportServiceAPI.sources.Services
 
 				// Проверка уникальности Email
 				bool emailUnique = !(await _db.Users.AnyAsync(x => x.Email == addedUser.Email));
-				if (emailUnique ==false)
+				if (emailUnique == false)
 				{
 					throw new UniqueConstraintException("", nameof(User.Email));
 				}
@@ -87,6 +86,7 @@ namespace ReportServiceAPI.sources.Services
 				throw;
 			}
 		}
+
 		public async Task<UserDTO> EditUserAsync(UserDTO editedUser)
 		{
 			try

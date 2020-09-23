@@ -12,7 +12,9 @@ using Microsoft.EntityFrameworkCore;
 
 using ReportServiceAPI.sources.Configs;
 using ReportServiceAPI.sources.DTOs;
+using ReportServiceAPI.sources.Exceptions;
 using ReportServiceAPI.sources.Models;
+using ReportServiceAPI.sources.Services;
 
 namespace ReportServiceAPI.sources.Controllers
 {
@@ -23,12 +25,12 @@ namespace ReportServiceAPI.sources.Controllers
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ReportsController : ControllerBase
-	{
-		private readonly ServiceDbContext _db;
+	{	
+		private readonly IReportWebService _reportWebService;
 
-		public ReportsController(ServiceDbContext db)
-		{
-			_db = db;
+		public ReportsController(IReportWebService reportWebService)
+		{			
+			_reportWebService = reportWebService;
 		}
 
 		/// <summary>
@@ -38,10 +40,10 @@ namespace ReportServiceAPI.sources.Controllers
 		[ProducesResponseType(typeof(Response), 200)]
 		[HttpGet]
 		public async Task<IActionResult> GetReports()
-		{			
+		{
 			try
 			{
-				var reportIds = await _db.Reports.Select(r => new { r.Id }).ToListAsync();
+				var reportIds = await _reportWebService.GetReportIdsAsync();
 				return new JsonResult(
 					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportIds }
 				);
@@ -51,7 +53,7 @@ namespace ReportServiceAPI.sources.Controllers
 				return new JsonResult(
 					new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
 				);
-			}			
+			}
 		}
 
 		/// <summary>
@@ -64,31 +66,31 @@ namespace ReportServiceAPI.sources.Controllers
 		[Route("{id}")]		
 		public async Task<IActionResult> GetReport(int? id)
 		{
-			if (id.HasValue == false)
-			{				
+			if(id.HasValue == false)
+			{
 				return new JsonResult(
 					new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
-					);
+				);
 			}
-
-			var report = await _db.Reports
-				.Include(x => x.User)
-				.Where(x => x.Id == id.Value)
-				.FirstOrDefaultAsync();
-			if (report == null)
+			try
+			{
+				var reportDTO = await _reportWebService.GetReportDetailsAsync(id.Value);
+				return new JsonResult(
+					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportDTO }
+				);
+			}
+			catch (EntityNotFoundException)
 			{
 				return new JsonResult(
 					new Response { Ok = false, StatusCode = 404, Description = "Отчет с таким id не найден" }
-					);
-			}
-
-			var config = AutoMapperConfig.FromReportToReportDTO;
-			var mapper = new Mapper(config);		
-			
-			var reportDTO = mapper.Map<ReportDTO>(report);
-			return new JsonResult(
-				new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportDTO }
 				);
+			}
+			catch (TimeoutException)
+			{
+				return new JsonResult(
+					new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
+				);
+			}
 		}
 
 		/// <summary>
@@ -103,34 +105,29 @@ namespace ReportServiceAPI.sources.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var config = AutoMapperConfig.FromReportDTOToReport;
-				var mapper = new Mapper(config);
-
-				var report = mapper.Map<Report>(reportDTO);
-				report.Id = default; // Зануляем Id, чтобы БД не ругалась на то, что такой Id уже существует (рассчитает его сама БД)
-
-				var user = await _db.Users.Where(u => u.Id == report.User.Id).FirstOrDefaultAsync();
-				if (user == null)
+				try
+				{
+					var addedReportDTO = await _reportWebService.AddReportAsync(reportDTO);
+					return new JsonResult(
+						new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = addedReportDTO }
+					);
+				}		
+				catch (EntityNotFoundException)
 				{
 					return new JsonResult(
 						new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
 					);
 				}
-
-				report.User = user;
-
-				await _db.Reports.AddAsync(report);
-				await _db.SaveChangesAsync();
-
-				var reportDTO2 = new Mapper(AutoMapperConfig.FromReportToReportDTO).Map<ReportDTO>(report);
-
-				return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportDTO2 }
-				);
+				catch (TimeoutException)
+				{
+					return new JsonResult(
+						new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
+					);
+				}
 			}
 			return new JsonResult(
-					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
-				);
+				new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
+			);
 		}
 
 		/// <summary>
@@ -149,53 +146,34 @@ namespace ReportServiceAPI.sources.Controllers
 				if (id.HasValue == false)
 				{
 					return new JsonResult(
-						   new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
-					   );
-				}
-
-				var report = await _db.Reports.Where(x => x.Id == id.Value).FirstOrDefaultAsync();
-				if (report == null)
-				{
-					return new JsonResult(
-						new Response { Ok = false, StatusCode = 404, Description = "Отчет с таким id не найден" }
-					);
-				}	
-
-				var config = AutoMapperConfig.FromReportDTOToReport;
-				var mapper = new Mapper(config);
-				var editedReport = mapper.Map<Report>(reportDTO);
-
-
-				var user = await _db.Users.Where(u => u.Id == editedReport.User.Id).FirstOrDefaultAsync();
-				if (user == null)
-				{
-					return new JsonResult(
-						new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
+						new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
 					);
 				}
 
-				report.Remark = editedReport.Remark;
-				report.Hours = editedReport.Hours;
-				// Добавляем дату только, если она была передана в теле запроса, иначе добавится системное время
-				// Можно и не добавлять эту проверку, если цель - изменять время на время редактирования
-				if (reportDTO.Date.HasValue)
+				reportDTO.Id = id.Value;
+				try
 				{
-					report.Date = editedReport.Date; 
+					var editedDTO = await _reportWebService.EditReportAsync(reportDTO);
+					return new JsonResult(
+						new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = editedDTO }
+					);
+				}				
+				catch (EntityNotFoundException ex)
+				{
+					return new JsonResult(
+						new Response { Ok = false, StatusCode = 404, Description = ex.Message }
+					);
 				}
-				report.User = user;
-				
-				_db.Reports.Update(report);
-				await _db.SaveChangesAsync();
-
-				var reportDTO2 = new Mapper(AutoMapperConfig.FromReportToReportDTO).Map<ReportDTO>(report);
-
-				return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportDTO2 }
-				);
+				catch (TimeoutException)
+				{
+					return new JsonResult(
+						new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
+					);
+				}
 			}
 			return new JsonResult(
-					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
-				);
+				new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
+			);
 		}
 
 		/// <summary>
@@ -213,28 +191,35 @@ namespace ReportServiceAPI.sources.Controllers
 				if (id.HasValue == false)
 				{
 					return new JsonResult(
-						   new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
-					   );
-				}
-
-				var report = await _db.Reports.Where(x => x.Id == id.Value).FirstOrDefaultAsync();
-				if (report == null)
-				{
-					return new JsonResult(
-						new Response { Ok = false, StatusCode = 404, Description = "Отчет с таким id не найден" }
+						new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
 					);
 				}
-
-				_db.Reports.Remove(report);
-				await _db.SaveChangesAsync();
-
-				return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно" }
-				);
+				try
+				{
+					bool isDeleted = await _reportWebService.DeleteReportAsync(id.Value);
+					if (isDeleted == false) // Не удален
+					{
+						return new JsonResult(
+							new Response { Ok = false, StatusCode = 404, Description = "Отчет с таким id не найден" }
+						);
+					}
+					else // Удален
+					{
+						return new JsonResult(
+							new Response { Ok = true, StatusCode = 200, Description = "Успешно" }
+						);
+					}
+				}
+				catch (TimeoutException)
+				{
+					return new JsonResult(
+						new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
+					);
+				}
 			}
 			return new JsonResult(
-					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
-				);
+				new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
+			);
 		}
 	}
 }

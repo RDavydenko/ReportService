@@ -46,7 +46,7 @@ namespace ReportServiceAPI.sources.Controllers
 				var usersIds = await _userWebService.GetUsersIdsAsync();
 				return new JsonResult(
 					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = usersIds }
-					);
+				);
 			}
 			catch (TimeoutException)
 			{
@@ -70,7 +70,7 @@ namespace ReportServiceAPI.sources.Controllers
 			{
 				return new JsonResult(
 					new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
-					);
+				);
 			}
 			try
 			{
@@ -178,8 +178,8 @@ namespace ReportServiceAPI.sources.Controllers
 				}
 			}
 			return new JsonResult(
-					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
-				);
+				new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
+			);
 		}
 
 		/// <summary>
@@ -224,8 +224,8 @@ namespace ReportServiceAPI.sources.Controllers
 				}
 			}
 			return new JsonResult(
-					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
-				);
+				new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
+			);
 		}
 
 		/// <summary>
