@@ -141,7 +141,7 @@ namespace ReportServiceAPI.sources.Controllers
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = DTO отредактированного отчета <see cref="ReportDTO"/></returns>
 		[ProducesResponseType(typeof(Response), 200)]
 		[HttpPost]
-		[ProducesResponseType(typeof(Response), 200)][Route("{id}/edit")]
+		[Route("{id}/edit")]
 		public async Task<IActionResult> EditReport(int? id, ReportDTO reportDTO)
 		{
 			if (ModelState.IsValid)

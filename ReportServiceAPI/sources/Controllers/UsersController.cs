@@ -231,8 +231,8 @@ namespace ReportServiceAPI.sources.Controllers
 		/// <param name="month">Месяц</param>
 		/// <param name="year">Год (по умолчанию 2020)</param>
 		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов отчетов</returns>
-		[HttpGet]
 		[ProducesResponseType(typeof(Response), 200)]
+		[HttpGet]
 		[Route("{id}/reports")]
 		public async Task<IActionResult> GetReportsByMonth(int? id, int? month, int year = 2020)
 		{

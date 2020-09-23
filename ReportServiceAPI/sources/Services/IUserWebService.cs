@@ -29,15 +29,15 @@ namespace ReportServiceAPI.sources.Services
 		/// Добавляет нового пользователя
 		/// </summary>
 		/// <param name="addedUser">Новый пользователь</param>
-		/// <returns>Успешна операция или нет</returns>
-		Task<bool> AddUserAsync(UserDTO addedUser);
+		/// <returns>Модель добавленного пользователя</returns>
+		Task<UserDTO> AddUserAsync(UserDTO addedUser);
 
 		/// <summary>
 		/// Редактирует информацию о существующем пользователе
 		/// </summary>
 		/// <param name="editedUser">Отредактированный пользователь</param>
-		/// <returns>Успешна операция или нет</returns>
-		Task<bool> EditUserAsync(UserDTO editedUser);
+		/// <returns>Модель отредактированного пользователя</returns>
+		Task<UserDTO> EditUserAsync(UserDTO editedUser);
 
 		/// <summary>
 		/// Удалить пользователя
