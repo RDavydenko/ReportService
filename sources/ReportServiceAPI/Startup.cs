@@ -104,7 +104,7 @@ namespace ReportServiceAPI
 			});
 			app.UseSwaggerUI(opt =>
 			{
-				opt.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+				opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
 			});
 
 			// Файловый сервер к документации Redoc
