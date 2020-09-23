@@ -16,12 +16,12 @@ namespace ReportService.WebApi.Services
 	/// <summary>
 	/// Реализация сервиса, работающего с отчетами
 	/// </summary>
-	public class ReportWebService : IReportWebService
+	public class ReportAppService : IReportAppService
 	{
 		private readonly ServiceDbContext _db;
 		private readonly IMapper _mapper;
 
-		public ReportWebService(ServiceDbContext db, IMapper mapper)
+		public ReportAppService(ServiceDbContext db, IMapper mapper)
 		{
 			_db = db;
 			_mapper = mapper;

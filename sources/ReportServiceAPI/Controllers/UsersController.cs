@@ -26,9 +26,9 @@ namespace ReportService.WebApi.Controllers
 	[ApiController]
 	public class UsersController : Controller
 	{
-		private readonly IUserWebService _userWebService;
+		private readonly IUserAppService _userWebService;
 
-		public UsersController(IUserWebService userWebService)
+		public UsersController(IUserAppService userWebService)
 		{
 			_userWebService = userWebService;
 		}

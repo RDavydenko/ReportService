@@ -10,7 +10,7 @@ namespace ReportService.WebApi.Services
 	/// <summary>
 	/// Интерфейс сервиса, работающего с отчетами
 	/// </summary>
-	public interface IReportWebService
+	public interface IReportAppService
 	{
 		/// <summary>
 		/// Возвращает список идентификаторов отчетов

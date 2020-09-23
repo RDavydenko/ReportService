@@ -76,10 +76,10 @@ namespace ReportServiceAPI
 			services.AddSingleton(mapper);
 
 			// Добавляем webService, работающий с пользователями
-			services.AddScoped<IUserWebService, UserWebService>();
+			services.AddScoped<IUserAppService, UserAppService>();
 
 			// Добавляем webService, работающий с отчетами
-			services.AddScoped<IReportWebService, ReportWebService>();
+			services.AddScoped<IReportAppService, ReportAppService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

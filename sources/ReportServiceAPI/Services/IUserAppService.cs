@@ -10,7 +10,7 @@ namespace ReportService.WebApi.Services
 	/// <summary>
 	/// Интерфейс сервиса, работающего с пользователем
 	/// </summary>
-	public interface IUserWebService
+	public interface IUserAppService
 	{
 		/// <summary>
 		/// Возвращает список идентификаторов пользователей

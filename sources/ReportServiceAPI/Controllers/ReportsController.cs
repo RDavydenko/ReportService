@@ -26,9 +26,9 @@ namespace ReportService.WebApi.Controllers
 	[ApiController]
 	public class ReportsController : ControllerBase
 	{	
-		private readonly IReportWebService _reportWebService;
+		private readonly IReportAppService _reportWebService;
 
-		public ReportsController(IReportWebService reportWebService)
+		public ReportsController(IReportAppService reportWebService)
 		{			
 			_reportWebService = reportWebService;
 		}
