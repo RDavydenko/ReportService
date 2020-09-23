@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace ReportServiceAPI.Models
+namespace ReportServiceAPI.sources.Models
 {
 	/// <summary>
 	/// Контекст базы данных приложения

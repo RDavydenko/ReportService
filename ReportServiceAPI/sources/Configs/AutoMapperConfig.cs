@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
-using ReportServiceAPI.DTOs;
-using ReportServiceAPI.Models;
+using ReportServiceAPI.sources.DTOs;
+using ReportServiceAPI.sources.Models;
 
-namespace ReportServiceAPI.Configs
+namespace ReportServiceAPI.sources.Configs
 {
 	/// <summary>
 	/// Конфигурация для AutoMapper'а

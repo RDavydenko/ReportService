@@ -10,11 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-using ReportServiceAPI.Configs;
-using ReportServiceAPI.DTOs;
-using ReportServiceAPI.Models;
+using ReportServiceAPI.sources.Configs;
+using ReportServiceAPI.sources.DTOs;
+using ReportServiceAPI.sources.Models;
+using ReportServiceAPI.sources.Services;
 
-namespace ReportServiceAPI.Controllers
+namespace ReportServiceAPI.sources.Controllers
 {
 	/// <summary>
 	/// Контроллер для работы с пользователями
@@ -25,10 +26,12 @@ namespace ReportServiceAPI.Controllers
 	public class UsersController : Controller
 	{
 		private readonly ServiceDbContext _db;
+		private readonly IUserWebService _userWebService;
 
-		public UsersController(ServiceDbContext db)
+		public UsersController(ServiceDbContext db, IUserWebService userWebService)
 		{
 			_db = db;
+			_userWebService = userWebService;
 		}
 
 		/// <summary>
@@ -40,6 +43,7 @@ namespace ReportServiceAPI.Controllers
 		public async Task<IActionResult> GetUsers()
 		{
 			var usersIds = await _db.Users.Select(x => new { x.Id }).ToListAsync();
+			//var usersIds = await _userWebService.GetUsersIdsAsync();
 
 			return new JsonResult(
 				new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = usersIds }

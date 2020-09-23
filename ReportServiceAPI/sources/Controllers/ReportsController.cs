@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using ReportServiceAPI.Configs;
-using ReportServiceAPI.DTOs;
-using ReportServiceAPI.Models;
+using ReportServiceAPI.sources.Configs;
+using ReportServiceAPI.sources.DTOs;
+using ReportServiceAPI.sources.Models;
 
-namespace ReportServiceAPI.Controllers
+namespace ReportServiceAPI.sources.Controllers
 {
 	/// <summary>
 	/// Контроллер для работы с отчетами

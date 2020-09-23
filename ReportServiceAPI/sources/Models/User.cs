@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ReportServiceAPI.Models
+namespace ReportServiceAPI.sources.Models
 {
 	/// <summary>
 	/// Пользователь

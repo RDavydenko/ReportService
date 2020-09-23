@@ -16,7 +16,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-using ReportServiceAPI.Models;
+using ReportServiceAPI.sources.Models;
 
 namespace ReportServiceAPI
 {
