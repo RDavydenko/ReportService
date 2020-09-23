@@ -40,7 +40,7 @@ namespace ReportServiceAPI.sources.Services
 			return usersDTO;
 		}
 
-		public async Task<UserDTO> GetUserDetailsOrDefaultAsync(int userId)
+		public async Task<UserDTO> GetUserDetailsAsync(int userId)
 		{
 			User user = null;
 			try
@@ -68,7 +68,15 @@ namespace ReportServiceAPI.sources.Services
 			try
 			{
 				var user = _mapper.Map<User>(addedUser);
-				user.Id = 0;
+				user.Id = 0; // Зануляем Id, чтобы БД не ругалась на то, что такой Id уже существует (рассчитает его сама БД)
+
+				// Проверка уникальности Email
+				bool emailUnique = !(await _db.Users.AnyAsync(x => x.Email == addedUser.Email));
+				if (emailUnique ==false)
+				{
+					throw new UniqueConstraintException("", nameof(User.Email));
+				}
+
 				await _db.Users.AddAsync(user);
 				await _db.SaveChangesAsync();
 				var userDTO = _mapper.Map<UserDTO>(user);
@@ -90,6 +98,13 @@ namespace ReportServiceAPI.sources.Services
 				}
 				else
 				{
+					// Проверка уникальности нового (отредактированного) Email
+					bool emailUniqueOrOwner = !(await _db.Users.AnyAsync(x => x.Email == editedUser.Email && x.Id != editedUser.Id));
+					if (emailUniqueOrOwner == false)
+					{
+						throw new UniqueConstraintException("", nameof(User.Email));
+					}
+
 					var user = await _db.Users.FirstAsync(x => x.Id == editedUser.Id);
 					var model = _mapper.Map<User>(editedUser);
 					if (!string.IsNullOrWhiteSpace(model.Name) && !string.IsNullOrEmpty(model.Name))

@@ -23,7 +23,7 @@ namespace ReportServiceAPI.sources.Services
 		/// </summary>
 		/// <param name="userId">Идентификатор пользователя</param>
 		/// <returns>Модель данных <see cref="UserDTO"/></returns>
-		Task<UserDTO> GetUserDetailsOrDefaultAsync(int userId);
+		Task<UserDTO> GetUserDetailsAsync(int userId);
 
 		/// <summary>
 		/// Добавляет нового пользователя

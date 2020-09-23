@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
+using AutoMapper;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +18,9 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
+using ReportServiceAPI.sources.Configs;
 using ReportServiceAPI.sources.Models;
+using ReportServiceAPI.sources.Services;
 
 namespace ReportServiceAPI
 {
@@ -45,7 +49,7 @@ namespace ReportServiceAPI
 				// Postrgres
 				builder.UseNpgsql(connection, npgsqlBuilder =>
 				{
-					
+
 				});
 			});
 
@@ -54,7 +58,7 @@ namespace ReportServiceAPI
 			services.AddSwaggerGen(opt =>
 			{
 				opt.SwaggerDoc("v1", new OpenApiInfo()
-				{ 
+				{
 					Version = "v1",
 					Title = "ReportServiceAPI",
 					Description = "REST API сервис дл€ учета отработанного времени.",
@@ -66,6 +70,18 @@ namespace ReportServiceAPI
 				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 				opt.IncludeXmlComments(xmlPath);
 			});
+
+			// ƒобавл€ем IMapper
+			var mapperConfig = new MapperConfiguration(mc =>
+			{
+				mc.AddProfile<UserMappingProfile>();
+				mc.AddProfile<ReportMappingProfile>();
+			});
+			IMapper mapper = mapperConfig.CreateMapper();
+			services.AddSingleton(mapper);
+
+			// ƒобавл€ем webService, работающий с пользовател€ми
+			services.AddScoped<IUserWebService, UserWebService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

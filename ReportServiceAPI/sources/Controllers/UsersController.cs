@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 
 using ReportServiceAPI.sources.Configs;
 using ReportServiceAPI.sources.DTOs;
+using ReportServiceAPI.sources.Exceptions;
 using ReportServiceAPI.sources.Models;
 using ReportServiceAPI.sources.Services;
 
@@ -25,12 +26,10 @@ namespace ReportServiceAPI.sources.Controllers
 	[ApiController]
 	public class UsersController : Controller
 	{
-		private readonly ServiceDbContext _db;
 		private readonly IUserWebService _userWebService;
 
-		public UsersController(ServiceDbContext db, IUserWebService userWebService)
+		public UsersController(IUserWebService userWebService)
 		{
-			_db = db;
 			_userWebService = userWebService;
 		}
 
@@ -42,12 +41,19 @@ namespace ReportServiceAPI.sources.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetUsers()
 		{
-			var usersIds = await _db.Users.Select(x => new { x.Id }).ToListAsync();
-			//var usersIds = await _userWebService.GetUsersIdsAsync();
-
-			return new JsonResult(
-				new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = usersIds }
+			try
+			{
+				var usersIds = await _userWebService.GetUsersIdsAsync();
+				return new JsonResult(
+					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = usersIds }
+					);
+			}
+			catch (TimeoutException)
+			{
+				return new JsonResult(
+					new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
 				);
+			}
 		}
 
 		/// <summary>
@@ -66,22 +72,25 @@ namespace ReportServiceAPI.sources.Controllers
 					new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
 					);
 			}
-
-			var user = await _db.Users.Where(x => x.Id == id.Value).FirstOrDefaultAsync();
-			if (user == null)
+			try
+			{
+				var userDTO = await _userWebService.GetUserDetailsAsync(id.Value);
+				return new JsonResult(
+					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = userDTO }
+				);
+			}
+			catch (EntityNotFoundException)
 			{
 				return new JsonResult(
 					new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
-					);
-			}
-
-			var config = AutoMapperConfig.FromUserToUserDTO;
-			var mapper = new Mapper(config);
-
-			var userDTO = mapper.Map<UserDTO>(user);
-			return new JsonResult(
-				new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = userDTO }
 				);
+			}
+			catch (TimeoutException)
+			{
+				return new JsonResult(
+					new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
+				);
+			}
 		}
 
 		/// <summary>
@@ -96,33 +105,29 @@ namespace ReportServiceAPI.sources.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var config = AutoMapperConfig.FromUserDTOToUser;
-				var mapper = new Mapper(config);
-
-				var user = mapper.Map<User>(userDTO);
-				user.Id = default; // Зануляем Id, чтобы БД не ругалась на то, что такой Id уже существует (рассчитает его сама БД)
-
-				// Можем добавить, только если Email уникальный (не существует подобный в БД)
-				bool isEmailUnique = _db.Users.Any(u => u.Email == user.Email) == false;
-				if (isEmailUnique == false)
+				try
 				{
+					var addedUserDTO = await _userWebService.AddUserAsync(userDTO);
 					return new JsonResult(
-						new Response { Ok = false, StatusCode = 403, Description = "Пользователь с таким Email уже существует. Ошибка" }
+						new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = addedUserDTO }
 					);
 				}
-
-				await _db.Users.AddAsync(user);
-				await _db.SaveChangesAsync();
-
-				var userDTO2 = new Mapper(AutoMapperConfig.FromUserToUserDTO).Map<UserDTO>(user);
-
-				return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = userDTO2 }
-				);
+				catch (UniqueConstraintException ex)
+				{
+					return new JsonResult(
+						new Response { Ok = false, StatusCode = 403, Description = $"Пользователь с таким {ex.ColumnName} уже существует. Ошибка" }
+					);
+				}
+				catch (TimeoutException)
+				{
+					return new JsonResult(
+						new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
+					);
+				}
 			}
 			return new JsonResult(
-					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
-				);
+				new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
+			);
 		}
 
 		/// <summary>
@@ -145,40 +150,32 @@ namespace ReportServiceAPI.sources.Controllers
 					   );
 				}
 
-				var user = await _db.Users.Where(x => x.Id == id.Value).FirstOrDefaultAsync();
-				if (user == null)
+				userDTO.Id = id.Value;
+				try
+				{
+					var editedUserDTO = await _userWebService.EditUserAsync(userDTO);
+					return new JsonResult(
+						new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = editedUserDTO }
+					);
+				}
+				catch (UniqueConstraintException ex)
+				{
+					return new JsonResult(
+						new Response { Ok = false, StatusCode = 403, Description = $"Пользователь с таким {ex.ColumnName} уже существует. Ошибка" }
+					);
+				}
+				catch (EntityNotFoundException)
 				{
 					return new JsonResult(
 						new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
 					);
 				}
-
-				var config = AutoMapperConfig.FromUserDTOToUser;
-				var mapper = new Mapper(config);
-				var editedModel = mapper.Map<User>(userDTO);
-
-				// Можем сменить, только на уникальный Email (не существует подобный в БД)
-				bool isEmailUnique = _db.Users.Any(u => u.Email == editedModel.Email && u.Id != user.Id) == false;
-				if (isEmailUnique == false)
+				catch (TimeoutException)
 				{
 					return new JsonResult(
-						new Response { Ok = false, StatusCode = 403, Description = "Пользователь с таким Email уже существует. Ошибка" }
+						new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
 					);
 				}
-
-				user.Email = editedModel.Email;
-				user.Name = editedModel.Name;
-				user.Surname = editedModel.Surname;
-				user.Patronymic = editedModel.Patronymic;
-
-				_db.Users.Update(user);
-				await _db.SaveChangesAsync();
-
-				var userDTO2 = new Mapper(AutoMapperConfig.FromUserToUserDTO).Map<UserDTO>(user);
-
-				return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = userDTO2 }
-				);
 			}
 			return new JsonResult(
 					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
@@ -203,21 +200,28 @@ namespace ReportServiceAPI.sources.Controllers
 						   new Response { Ok = false, StatusCode = 403, Description = "Неверный переданный параметр - " + nameof(id) }
 					   );
 				}
-
-				var user = await _db.Users.Where(x => x.Id == id.Value).FirstOrDefaultAsync();
-				if (user == null)
+				try
+				{
+					bool isDeleted = await _userWebService.DeleteUserAsync(id.Value);
+					if (isDeleted == false) // Не удален
+					{
+						return new JsonResult(
+							new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
+						);
+					}
+					else // Удален
+					{
+						return new JsonResult(
+							new Response { Ok = true, StatusCode = 200, Description = "Успешно" }
+						);
+					}
+				}
+				catch (TimeoutException)
 				{
 					return new JsonResult(
-						new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
+						new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
 					);
 				}
-
-				_db.Users.Remove(user);
-				await _db.SaveChangesAsync();
-
-				return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно" }
-				);
 			}
 			return new JsonResult(
 					new Response { Ok = false, StatusCode = 403, Description = "Переданные данные не прошли валидацию" }
@@ -257,30 +261,25 @@ namespace ReportServiceAPI.sources.Controllers
 					   );
 			}
 
-			// Рассчитываем начальный и конечный день указанного месяца
-			DateTime firstDayOfMonth = new DateTime(year, month.Value, 1);
-			int days = DateTime.DaysInMonth(year, month.Value);
-			DateTime lastDayOfMonth = new DateTime(year, month.Value, days, hour: 23, minute: 59, second: 59);
-
-			// Существует пользователь или нет
-			bool isUserExist = _db.Users.Any(x => x.Id == id.Value);
-			if (isUserExist == false)
+			try
 			{
+				var reportIds = await _userWebService.GetReportsByMonthAsync(id.Value, month.Value, year);
 				return new JsonResult(
-						new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
-					);
-			}
-
-			// Отчеты, которые были написаны в указанном месяце (с 1 по последний день включительно)
-			var reportIds = await _db.Reports
-				.Include(x => x.User)
-				.Where(x => x.User.Id == id.Value && x.Date >= firstDayOfMonth && x.Date <= lastDayOfMonth)
-				.Select(x => new { x.Id })
-				.ToListAsync();
-
-			return new JsonResult(
 					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportIds }
 				);
+			}
+			catch (EntityNotFoundException)
+			{
+				return new JsonResult(
+					new Response { Ok = false, StatusCode = 404, Description = "Пользователь с таким id не найден" }
+				);
+			}
+			catch (TimeoutException)
+			{
+				return new JsonResult(
+					new Response { Ok = false, StatusCode = 500, Description = "База данных недоступна" }
+				);
+			}
 		}
 	}
 }
