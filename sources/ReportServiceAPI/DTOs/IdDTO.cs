@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ReportServiceAPI.DTOs
+namespace ReportService.WebApi.DTOs
 {
 	/// <summary>
 	/// Хранит Id сущности

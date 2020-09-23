@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using ReportServiceAPI.Models;
+using ReportService.WebApi.Models;
 
-namespace ReportServiceAPI.migrations
+namespace ReportService.WebApi.migrations
 {
     [DbContext(typeof(ServiceDbContext))]
     partial class ServiceDbContextModelSnapshot : ModelSnapshot
@@ -19,7 +19,7 @@ namespace ReportServiceAPI.migrations
                 .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("ReportServiceAPI.Models.Report", b =>
+            modelBuilder.Entity("ReportService.WebApi.Models.Report", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,7 +48,7 @@ namespace ReportServiceAPI.migrations
                     b.ToTable("Reports");
                 });
 
-            modelBuilder.Entity("ReportServiceAPI.Models.User", b =>
+            modelBuilder.Entity("ReportService.WebApi.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -78,9 +78,9 @@ namespace ReportServiceAPI.migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ReportServiceAPI.Models.Report", b =>
+            modelBuilder.Entity("ReportService.WebApi.Models.Report", b =>
                 {
-                    b.HasOne("ReportServiceAPI.Models.User", "User")
+                    b.HasOne("ReportService.WebApi.Models.User", "User")
                         .WithMany("Reports")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

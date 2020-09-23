@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace ReportServiceAPI.migrations
+namespace ReportService.WebApi.migrations
 {
     public partial class Initial : Migration
     {

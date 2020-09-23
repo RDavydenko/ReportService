@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ReportServiceAPI.DTOs;
+using ReportService.WebApi.DTOs;
 
-namespace ReportServiceAPI.Services
+namespace ReportService.WebApi.Services
 {
 	/// <summary>
 	/// Интерфейс сервиса, работающего с отчетами

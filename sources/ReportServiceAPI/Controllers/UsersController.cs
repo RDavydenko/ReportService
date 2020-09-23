@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-using ReportServiceAPI.Configs;
-using ReportServiceAPI.DTOs;
-using ReportServiceAPI.Exceptions;
-using ReportServiceAPI.Models;
-using ReportServiceAPI.Services;
+using ReportService.WebApi.Configs;
+using ReportService.WebApi.DTOs;
+using ReportService.WebApi.Exceptions;
+using ReportService.WebApi.Models;
+using ReportService.WebApi.Services;
 
-namespace ReportServiceAPI.Controllers
+namespace ReportService.WebApi.Controllers
 {
 	/// <summary>
 	/// Контроллер для работы с пользователями

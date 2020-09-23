@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
-using ReportServiceAPI.DTOs;
-using ReportServiceAPI.Models;
+using ReportService.WebApi.DTOs;
+using ReportService.WebApi.Models;
 
-namespace ReportServiceAPI.Configs
+namespace ReportService.WebApi.Configs
 {
 	/// <summary>
 	/// Маппинг-профиль для класса <see cref="User"/>

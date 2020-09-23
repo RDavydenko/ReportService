@@ -7,11 +7,11 @@ using AutoMapper;
 
 using Microsoft.EntityFrameworkCore;
 
-using ReportServiceAPI.DTOs;
-using ReportServiceAPI.Exceptions;
-using ReportServiceAPI.Models;
+using ReportService.WebApi.DTOs;
+using ReportService.WebApi.Exceptions;
+using ReportService.WebApi.Models;
 
-namespace ReportServiceAPI.Services
+namespace ReportService.WebApi.Services
 {
 	/// <summary>
 	/// Реализация сервиса, работающего с пользователем

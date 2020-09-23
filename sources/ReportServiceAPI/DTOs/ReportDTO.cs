@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-using ReportServiceAPI.Models;
+using ReportService.WebApi.Models;
 
-namespace ReportServiceAPI.DTOs
+namespace ReportService.WebApi.DTOs
 {
 	/// <summary>
 	/// DTO класса <see cref="Report"/>

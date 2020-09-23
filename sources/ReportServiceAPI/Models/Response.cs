@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ReportServiceAPI.Models
+namespace ReportService.WebApi.Models
 {
 	/// <summary>
 	/// Ответ пользователю от сервера

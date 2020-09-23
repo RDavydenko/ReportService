@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace ReportServiceAPI.Exceptions
+namespace ReportService.WebApi.Exceptions
 {
 	/// <summary>
 	/// Исключение, когда не найдена сущность в БД
