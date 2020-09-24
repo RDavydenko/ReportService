@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,9 +20,9 @@ namespace ReportServiceAPI
 		{
 			var config = new ConfigurationBuilder()
 				.AddJsonFile("appsettings.json", optional: false)
-				.Build(); // Конфигурация приложения
+				.Build(); // РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ
 
-			// Получаем значения из конфига appsettings.json
+			// РџРѕР»СѓС‡Р°РµРј Р·РЅР°С‡РµРЅРёСЏ РёР· РєРѕРЅС„РёРіР° appsettings.json
 			var serilogConfig = config.GetSection("Logging").GetSection("Serilog");
 			var rollingInterval = serilogConfig.GetValue<RollingInterval>("RollingInterval", RollingInterval.Infinite);
 			var sizeLimitBytes = serilogConfig.GetValue<long>("FileSizeLimitBytes", 1024 * 1024 * 50);
@@ -43,7 +43,7 @@ namespace ReportServiceAPI
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
-				.UseSerilog() // Добавить логгирование
+				.UseSerilog() // Р”РѕР±Р°РІРёС‚СЊ Р»РѕРіРіРёСЂРѕРІР°РЅРёРµ
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
 					webBuilder.UseStartup<Startup>();
