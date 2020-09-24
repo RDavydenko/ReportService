@@ -41,7 +41,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, "Возникло исключение при получении списка отчетов");
 				throw;
 			}
 		}
@@ -64,9 +64,14 @@ namespace ReportService.WebApi.Services
 					return reportDTO;
 				}
 			}
+			catch (EntityNotFoundException)
+			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, $"Возникло исключение при получении детальной информации об отчете с id = {reportId}");
 				throw;
 			}
 		}
@@ -93,9 +98,14 @@ namespace ReportService.WebApi.Services
 				var reportDTO = _mapper.Map<ReportDTO>(report);
 				return reportDTO;
 			}
+			catch (EntityNotFoundException)
+			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, "Возникло исключение при добавлении нового отчета");
 				throw;
 			}
 		}
@@ -145,9 +155,14 @@ namespace ReportService.WebApi.Services
 					return editedDTO;
 				}
 			}
+			catch (EntityNotFoundException)
+			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, $"Возникло исключение при редактировании отчета с id = {edited.Id}");
 				throw;
 			}
 		}
@@ -171,7 +186,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, $"Возникло исключение при удалении отчета с id = {reportId}");
 				throw;
 			}
 		}

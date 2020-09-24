@@ -40,7 +40,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, "Возникло исключение при получении списка пользователей");
 				throw;
 			}
 		}
@@ -60,9 +60,14 @@ namespace ReportService.WebApi.Services
 					return userDTO;
 				}
 			}
+			catch (EntityNotFoundException)
+			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, $"Возникло исключение при получении детальной информации о пользователе c id = {userId}");
 				throw;
 			}
 		}
@@ -86,9 +91,14 @@ namespace ReportService.WebApi.Services
 				var userDTO = _mapper.Map<UserDTO>(user);
 				return userDTO;
 			}
+			catch (UniqueConstraintException)
+			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, $"Возникло исключение при добавлении нового пользователя");
 				throw;
 			}
 		}
@@ -136,9 +146,19 @@ namespace ReportService.WebApi.Services
 					return editedDTO;
 				}
 			}
+			catch (EntityNotFoundException)
+			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
+			catch (UniqueConstraintException)
+			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, $"Возникло исключение при редактировании пользователя с id = {editedUser.Id}");
 				throw;
 			}
 		}
@@ -162,7 +182,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, $"Возникло исключение при удалении пользвателя с id = {userId}");
 				throw;
 			}
 		}
@@ -192,12 +212,16 @@ namespace ReportService.WebApi.Services
 				var reportsDTO = _mapper.Map<IEnumerable<IdDTO>>(reports);
 				return reportsDTO;
 			}
+			catch (EntityNotFoundException)
+			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
+				_logger.LogCritical(ex, $"Возникло исключение при получении списка отчетов у пользователя с id = {userId} за месяц {month} год {year}");
 				throw;
 			}
 		}
-
 	}
 }
