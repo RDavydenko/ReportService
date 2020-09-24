@@ -28,7 +28,7 @@ namespace ReportService.WebApi.Controllers
 	public class ReportsController : ControllerBase
 	{	
 		private readonly IReportAppService _reportWebService;
-		private readonly ILogger<ReportsController> _logger;
+		private readonly ILogger<ReportsController> _logger; 
 
 		public ReportsController(IReportAppService reportWebService, ILogger<ReportsController> logger)
 		{			
