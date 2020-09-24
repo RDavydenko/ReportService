@@ -40,7 +40,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, ex.Message);
+				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
 				throw;
 			}
 		}
@@ -62,7 +62,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, ex.Message);
+				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
 				throw;
 			}
 		}
@@ -88,7 +88,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, ex.Message);
+				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
 				throw;
 			}
 		}
@@ -138,7 +138,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, ex.Message);
+				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
 				throw;
 			}
 		}
@@ -162,7 +162,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, ex.Message);
+				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
 				throw;
 			}
 		}
@@ -194,7 +194,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex, ex.Message);
+				_logger.LogCritical(ex, "Возникла ошибка при работе с базой данных! Критично!");
 				throw;
 			}
 		}
