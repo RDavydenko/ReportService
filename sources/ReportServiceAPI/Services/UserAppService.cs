@@ -40,7 +40,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -62,7 +62,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -88,7 +88,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -138,7 +138,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -162,7 +162,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -194,7 +194,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}

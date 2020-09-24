@@ -34,13 +34,17 @@ namespace ReportService.WebApi.Services
 		{
 			try
 			{
+				var user = new User();
+				user.Reports = null;
+				user.Reports.Where(x => x.User.Id == user.Id);
+
 				var reports = await _db.Reports.AsNoTracking().ToListAsync();
 				var reportsDTO = _mapper.Map<IEnumerable<IdDTO>>(reports);				
 				return reportsDTO;
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -65,7 +69,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -94,7 +98,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -146,7 +150,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
@@ -170,7 +174,7 @@ namespace ReportService.WebApi.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogCritical(ex.Message, ex);
+				_logger.LogCritical(ex, ex.Message);
 				throw;
 			}
 		}
