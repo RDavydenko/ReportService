@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 using ReportService.WebApi.DTOs;
 using ReportService.WebApi.Exceptions;
@@ -20,23 +21,26 @@ namespace ReportService.WebApi.Services
 	{
 		private readonly ServiceDbContext _db;
 		private readonly IMapper _mapper;
+		private readonly ILogger<UserAppService> _logger;
 
-		public UserAppService(ServiceDbContext db, IMapper mapper)
+		public UserAppService(ServiceDbContext db, IMapper mapper, ILogger<UserAppService> logger)
 		{
 			_db = db;
 			_mapper = mapper;
+			_logger = logger;
 		}
 
 		public async Task<IEnumerable<IdDTO>> GetUsersIdsAsync()
 		{
 			try
-			{
+			{				
 				var users = await _db.Users.AsNoTracking().ToListAsync();
 				var usersDTO = _mapper.Map<IEnumerable<IdDTO>>(users);
 				return usersDTO;
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogCritical(ex.Message, ex);
 				throw;
 			}
 		}
@@ -56,8 +60,9 @@ namespace ReportService.WebApi.Services
 					return userDTO;
 				}
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogCritical(ex.Message, ex);
 				throw;
 			}
 		}
@@ -81,8 +86,9 @@ namespace ReportService.WebApi.Services
 				var userDTO = _mapper.Map<UserDTO>(user);
 				return userDTO;
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogCritical(ex.Message, ex);
 				throw;
 			}
 		}
@@ -130,8 +136,9 @@ namespace ReportService.WebApi.Services
 					return editedDTO;
 				}
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogCritical(ex.Message, ex);
 				throw;
 			}
 		}
@@ -153,8 +160,9 @@ namespace ReportService.WebApi.Services
 					return true;
 				}
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogCritical(ex.Message, ex);
 				throw;
 			}
 		}
@@ -184,8 +192,9 @@ namespace ReportService.WebApi.Services
 				var reportsDTO = _mapper.Map<IEnumerable<IdDTO>>(reports);
 				return reportsDTO;
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogCritical(ex.Message, ex);
 				throw;
 			}
 		}

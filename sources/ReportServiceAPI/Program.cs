@@ -33,7 +33,7 @@ namespace ReportServiceAPI
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
-				.UseSerilog()
+				.UseSerilog() // Добавить логгирование
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
 					webBuilder.UseStartup<Startup>();

@@ -9,6 +9,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 using ReportService.WebApi.Configs;
 using ReportService.WebApi.DTOs;
@@ -27,10 +28,12 @@ namespace ReportService.WebApi.Controllers
 	public class ReportsController : ControllerBase
 	{	
 		private readonly IReportAppService _reportWebService;
+		private readonly ILogger<ReportsController> _logger;
 
-		public ReportsController(IReportAppService reportWebService)
+		public ReportsController(IReportAppService reportWebService, ILogger<ReportsController> logger)
 		{			
 			_reportWebService = reportWebService;
+			_logger = logger;
 		}
 
 		/// <summary>
