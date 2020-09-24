@@ -17,15 +17,25 @@ namespace ReportServiceAPI
 	public class Program
 	{
 		public static void Main(string[] args)
-		{			
-			string logPathFull = Path.Combine(Directory.GetCurrentDirectory(), "logs", ".log"); // %dir%\logs\{logName}.log
+		{
+			var config = new ConfigurationBuilder()
+				.AddJsonFile("appsettings.json", optional: false)
+				.Build(); // Конфигурация приложения
 
+			// Получаем значения из конфига appsettings.json
+			var serilogConfig = config.GetSection("Logging").GetSection("Serilog");
+			var rollingInterval = serilogConfig.GetValue<RollingInterval>("RollingInterval", RollingInterval.Infinite);
+			var sizeLimitBytes = serilogConfig.GetValue<long>("FileSizeLimitBytes", 1024 * 1024 * 50);
+			var rollOnFileSizeLimit = serilogConfig.GetValue<bool>("RollOnFileSizeLimit", false);
+
+			string logPathFull = Path.Combine(Directory.GetCurrentDirectory(), "logs", ".log"); // %dir%\logs\{logName}.log
+			
 			Log.Logger = new LoggerConfiguration()
 				.Enrich.FromLogContext()
 				.WriteTo.File(path: logPathFull,							
-							rollingInterval: RollingInterval.Day,	// Лог-файл создается на день (новый день -> новый лог-файл)
-							fileSizeLimitBytes: 1024 * 1024 * 50,	// Лимит по размеру 50 МБ
-							rollOnFileSizeLimit: true)				// Создаем новый при превышении лимита по размеру
+							rollingInterval: rollingInterval,			
+							fileSizeLimitBytes: sizeLimitBytes,			
+							rollOnFileSizeLimit: rollOnFileSizeLimit)	
 				.CreateLogger();
 
 			CreateHostBuilder(args).Build().Run();
