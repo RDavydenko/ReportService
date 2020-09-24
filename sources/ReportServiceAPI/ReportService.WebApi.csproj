@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="devops\**" />
+    <Compile Remove="logs\**" />
     <Compile Remove="resources\**" />
     <Content Remove="devops\**" />
+    <Content Remove="logs\**" />
     <Content Remove="resources\**" />
     <EmbeddedResource Remove="devops\**" />
+    <EmbeddedResource Remove="logs\**" />
     <EmbeddedResource Remove="resources\**" />
     <None Remove="devops\**" />
+    <None Remove="logs\**" />
     <None Remove="resources\**" />
   </ItemGroup>
 
