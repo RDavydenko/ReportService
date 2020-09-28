@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 using ReportService.WebApi.DTOs;
 using ReportService.WebApi.Exceptions;
@@ -20,11 +22,13 @@ namespace ReportService.WebApi.Services
 	{
 		private readonly ServiceDbContext _db;
 		private readonly IMapper _mapper;
+		private readonly ILogger<ReportAppService> _logger;
 
-		public ReportAppService(ServiceDbContext db, IMapper mapper)
+		public ReportAppService(ServiceDbContext db, IMapper mapper, ILogger<ReportAppService> logger)
 		{
 			_db = db;
 			_mapper = mapper;
+			_logger = logger;
 		}
 
 		public async Task<IEnumerable<IdDTO>> GetReportIdsAsync()
@@ -32,11 +36,12 @@ namespace ReportService.WebApi.Services
 			try
 			{
 				var reports = await _db.Reports.AsNoTracking().ToListAsync();
-				var reportsDTO = _mapper.Map<IEnumerable<IdDTO>>(reports);
+				var reportsDTO = _mapper.Map<IEnumerable<IdDTO>>(reports);				
 				return reportsDTO;
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogCritical(ex, "Возникло исключение при получении списка отчетов");
 				throw;
 			}
 		}
@@ -59,8 +64,14 @@ namespace ReportService.WebApi.Services
 					return reportDTO;
 				}
 			}
-			catch
+			catch (EntityNotFoundException)
 			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogCritical(ex, $"Возникло исключение при получении детальной информации об отчете с id = {reportId}");
 				throw;
 			}
 		}
@@ -87,8 +98,14 @@ namespace ReportService.WebApi.Services
 				var reportDTO = _mapper.Map<ReportDTO>(report);
 				return reportDTO;
 			}
-			catch
+			catch (EntityNotFoundException)
 			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogCritical(ex, "Возникло исключение при добавлении нового отчета");
 				throw;
 			}
 		}
@@ -138,8 +155,14 @@ namespace ReportService.WebApi.Services
 					return editedDTO;
 				}
 			}
-			catch
+			catch (EntityNotFoundException)
 			{
+				// Не логируем, т.к. не является как таковой ошибкой в работе
+				throw;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogCritical(ex, $"Возникло исключение при редактировании отчета с id = {edited.Id}");
 				throw;
 			}
 		}
@@ -161,8 +184,9 @@ namespace ReportService.WebApi.Services
 					return true;
 				}
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogCritical(ex, $"Возникло исключение при удалении отчета с id = {reportId}");
 				throw;
 			}
 		}
