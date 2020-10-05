@@ -48,6 +48,8 @@ namespace ReportServiceAPI
 				});
 			});
 
+			services.AddCors();
+
 			services.AddControllers();
 
 			services.AddSwaggerGen(opt =>
@@ -117,6 +119,13 @@ namespace ReportServiceAPI
 			});
 
 			app.UseRouting();
+
+			app.UseCors(builder =>
+			{
+				builder.AllowAnyOrigin();
+				builder.WithMethods("GET", "POST");
+				builder.WithHeaders("Content-Type");
+			});
 
 			app.UseAuthorization();
 
