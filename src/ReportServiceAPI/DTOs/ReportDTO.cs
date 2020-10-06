@@ -42,6 +42,16 @@ namespace ReportService.WebApi.DTOs
 		public int? UserId { get; set; }
 
 		/// <summary>
+		/// Имя пользователя, которому принадлежит отчет
+		/// </summary>
+		public string UserName { get; set; }
+
+		/// <summary>
+		/// Фамилия пользователя, которому принадлежит отчет
+		/// </summary>
+		public string UserSurname { get; set; }
+
+		/// <summary>
 		/// Конструктор по умолчанию
 		/// </summary>
 		public ReportDTO()

@@ -24,6 +24,18 @@ namespace ReportService.WebApi.Configs
 					// Если User не NULL, то записываем в поле UserId значение User.Id
 					opt.Condition(x => x.User != null);
 					opt.MapFrom(x => x.User.Id);
+				})
+				.ForMember(x => x.UserName, opt =>
+				{
+					// Если User не NULL, то записываем в поле Name значение User.Name
+					opt.Condition(x => x.User != null);
+					opt.MapFrom(x => x.User.Name);
+				})
+				.ForMember(x => x.UserSurname, opt =>
+				{
+					// Если User не NULL, то записываем в поле Surname значение User.Surname
+					opt.Condition(x => x.User != null);
+					opt.MapFrom(x => x.User.Surname);
 				});
 
 			// Из ReportDTO в Report

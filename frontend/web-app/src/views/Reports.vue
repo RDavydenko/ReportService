@@ -27,9 +27,9 @@
 
       <tbody>
         <Report
-          v-for="report in reportIdx"
-          :key="report.id"
-          :reportId="report.id"
+          v-for="(report, index) in reports"
+          :key="index"
+          :report="report"
           @open-modal="openModal"
         />
       </tbody>
@@ -44,23 +44,21 @@ import ReportDetails from "@/components/ReportDetails";
 export default {
   data() {
     return {
-      reportIdx: [],
       modal: {
         modalShow: false,
         currentModalReport: 0,
         mode: 'change'
       }
-    };
-  },
-  
-  async created() {
-    let response = await fetch("https://localhost:44375/api/reports")
-    let json = await response.json()
-    if (json.ok) {
-      this.reportIdx = json.object
     }
   },
-  
+  computed: {
+    reports() {
+      return this.$store.getters.reports;
+    }
+  },
+  async created() {
+    this.$store.dispatch('fetchReports')
+  },
   methods: {
     openModal(id) {
       this.modal.mode = 'change'

@@ -63,13 +63,10 @@ export default {
     };
   },
   async created() {
-    let response = await fetch(
-      "https://localhost:44375/api/reports/" + this.reportId
-    );
-    let json = await response.json();
-    if (json.ok) {
-      this.report = json.object;
+    if (this.mode === "change") {
+      this.report = this.$store.getters.getReportById(this.reportId);
     }
+    this.$store.dispatch('fetchUsers');
   },
   computed: {
     date() {
@@ -92,38 +89,18 @@ export default {
     async saveChanges() {
       let response;
       if (this.mode === "change") {
-        response = await fetch(
-          "https://localhost:44375/api/reports/" + this.report.id + "/edit",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json;charset=utf-8"
-            },
-            body: JSON.stringify(this.report)
-          }
-        );
+        response = await this.$store.dispatch("updateReport", this.report);
       }
       if (this.mode === "create") {
-        response = await fetch("https://localhost:44375/api/reports/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=utf-8"
-          },
-          body: JSON.stringify(this.report)
-        });
+        response = await this.$store.dispatch("createReport", this.report);
       }
+
       this.message.display = true;
+      this.message.text = response.description;
       if (response.ok) {
-        let json = await response.json();
-        this.message.text = json.description;
-        if (json.ok) {
-          this.message.type = "success";
-          this.report = json.object;
-        } else {
-          this.message.type = "error";
-        }
+        this.message.type = "success";
+        this.report = response.object;
       } else {
-        this.message.text = "Ошибка!";
         this.message.type = "error";
       }
     },
@@ -131,21 +108,7 @@ export default {
       this.report.date = new Date(e.target.value);
     },
     async downloadUsers() {
-      if (this.users.length == 0) {
-        let userIdsResponse = await fetch("https://localhost:44375/api/users");
-        let userIds = await userIdsResponse.json();
-        if (userIds.ok) {
-          for (let i = 0; i < userIds.object.length; i++) {
-            let userReposnse = await fetch(
-              "https://localhost:44375/api/users/" + userIds.object[i].id
-            );
-            let user = await userReposnse.json();
-            if (user.ok) {
-              this.users.push(user.object);
-            }
-          }
-        }
-      }
+      this.users = this.$store.getters.users;
     }
   },
   components: {

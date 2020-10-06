@@ -79,20 +79,20 @@ export default {
 			}
 			return json;
 		},
-		async removeUser(context, userId) {			
+		async removeUser(context, userId) {
 			let response = await fetch(
 				"https://localhost:44375/api/users/" + userId + "/delete",
 				{
-				  method: "POST",
-				  headers: {
-					 "Content-Type": "application/json;charset=utf-8"
-				  }
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json;charset=utf-8"
+					}
 				}
-			 );
-			 let json = await response.json();			
-			 if (json.ok) {
+			);
+			let json = await response.json();
+			if (json.ok) {
 				context.commit("removeUser", userId);
-			 }
+			}
 		}
 	}
 }

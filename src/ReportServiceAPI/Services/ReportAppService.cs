@@ -31,7 +31,7 @@ namespace ReportService.WebApi.Services
 		{
 			try
 			{
-				var reports = await _db.Reports.AsNoTracking().ToListAsync();
+				var reports = await _db.Reports.Include(x => x.User).AsNoTracking().ToListAsync();
 				var reportsDTO = _mapper.Map<IEnumerable<ReportDTO>>(reports);
 				return reportsDTO;
 			}

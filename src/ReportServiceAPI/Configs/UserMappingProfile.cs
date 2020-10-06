@@ -18,7 +18,7 @@ namespace ReportService.WebApi.Configs
 		public UserMappingProfile()
 		{
 			// Из User в UserDTO
-			CreateMap<User, UserDTO>();
+			CreateMap<User, UserDTO>();				
 
 			// Из UserDTO в User
 			CreateMap<UserDTO, User>();
