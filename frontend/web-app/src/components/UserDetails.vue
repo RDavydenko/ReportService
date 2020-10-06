@@ -29,7 +29,7 @@
         class="btn modal-close waves-effect waves-green btn-flat"
         @click="saveChanges"
       >
-        Изменить
+        {{ mode === "change" ? "Изменить" : "Создать" }}
       </button>
     </div>
   </div>
@@ -39,10 +39,10 @@
 import Message from "@/components/Message";
 
 export default {
-  props: ["userId"],
+  props: ["userId", "mode"],
   data() {
     return {
-      user: {},      
+      user: {},
       message: {
         display: false,
         text: "",
@@ -61,16 +61,30 @@ export default {
   },
   methods: {
     async saveChanges() {
-      let response = await fetch(
-        "https://localhost:44375/api/users/" + this.user.id + "/edit",
-        {
+      let response;
+      if (this.mode === "change") {
+        response = await fetch(
+          "https://localhost:44375/api/users/" + this.user.id + "/edit",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(this.user)
+          }
+        );
+      }
+      
+      if (this.mode === "create") {
+        response = await fetch("https://localhost:44375/api/users/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json;charset=utf-8"
           },
           body: JSON.stringify(this.user)
-        }
-      );
+        });
+      }
+
       this.message.display = true;
       if (response.ok) {
         let json = await response.json();

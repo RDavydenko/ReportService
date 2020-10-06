@@ -1,9 +1,16 @@
 <template>
   <div>
+    <div class="menu">
+      <button class="btn green" @click="addUser">
+        Добавить<i class="left material-icons">add</i>
+      </button>
+    </div>
+
     <!-- Modal Structure -->
     <UserDetails
       v-if="modal.modalShow"
       :userId="modal.currentModalUser"
+      :mode="modal.mode"
       @close-modal="closeModal"
     ></UserDetails>
 
@@ -21,11 +28,11 @@
         <User
           v-for="(user, index) in userIdx"
           :key="index"
-          :userId="user"
+          :userId="user"          
           @open-modal="openModal"
         />
       </tbody>
-    </table>    
+    </table>
   </div>
 </template>
 
@@ -39,7 +46,8 @@ export default {
       userIdx: [],
       modal: {
         modalShow: false,
-        currentModalUser: 0
+        currentModalUser: 0,
+        mode: "change"
       }
     };
   },
@@ -54,11 +62,17 @@ export default {
   },
   methods: {
     openModal(id) {
+      this.modal.mode = 'change'
       this.modal.currentModalUser = id;
       this.modal.modalShow = true;
     },
     closeModal() {
       this.modal.modalShow = false;
+    },
+    addUser() {
+      this.modal.mode = 'create'
+      this.modal.currentModalUser = 0
+      this.modal.modalShow = true
     }
   },
   components: {
@@ -69,4 +83,8 @@ export default {
 </script>
 
 <style scoped>
+.menu {
+    float: right;
+    margin-top: 20px;
+  }
 </style>

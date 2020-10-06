@@ -16,9 +16,12 @@
         <button
           type="button"
           class="btn btn-small blue"
-          @click="details(user.id)"
+          @click="details"
         >
           Подробнее
+        </button>
+         <button @click="remove" class="btn btn-small pink">
+          <i class="material-icons">delete</i>
         </button>
       </div>
     </td>
@@ -45,8 +48,20 @@ export default {
     }
   },
   methods: {
-    details(id) {
-      this.$emit("open-modal", id);
+    details() {
+      this.$emit("open-modal", this.user.id);
+    },
+    async remove() {
+      let response = await fetch("https://localhost:44375/api/users/" + this.user.id + "/delete", {
+			 method: "POST",
+			 headers: {
+            "Content-Type": "application/json;charset=utf-8"
+          }
+		 })
+		 let json = await response.json();
+		 if (json.ok) {
+			 this.$emit('remove', this.user.id);
+		 }
     }
   }
 };

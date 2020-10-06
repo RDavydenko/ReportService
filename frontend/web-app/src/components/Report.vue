@@ -11,7 +11,7 @@
         <button
           type="button"
           class="btn btn-small blue"
-          @click="details(report.id)"
+          @click="details"
         >
           Подробнее
         </button>
@@ -50,8 +50,8 @@ export default {
     }
   },
   methods: {
-    details(id) {
-      this.$emit("open-modal", id);
+    details() {
+      this.$emit("open-modal", this.report.id);
 	 },
 	 async remove() {
 		 let response = await fetch("https://localhost:44375/api/reports/" + this.report.id + "/delete", {
@@ -66,7 +66,7 @@ export default {
 		 }
 	 }
   }
-};
+}
 </script>
 
 <style>
