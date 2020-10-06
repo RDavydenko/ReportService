@@ -13,19 +13,20 @@
         <div class="input-field col">
           <input v-model.number="report.hours" placeholder="0" type="number" />
         </div>
+
         <label>Пользователь (владелец)</label>
-		  <div>
-        <select
-          @focus="downloadUsers"
-          v-model="report.userId"
-          class="browser-default"			
-        >
-          <option value="" disabled selected>Выберите пользователя</option>
-          <option v-for="(user, i) in users" :key="i" :value="user.id"
-            >{{ user.surname }} {{ user.name }}</option
+        <div>
+          <select
+            @focus="downloadUsers"
+            v-model="report.userId"
+            class="browser-default"
           >
-        </select>
-		  </div>
+            <option value="" disabled selected>Выберите пользователя</option>
+            <option v-for="(user, i) in users" :key="i" :value="user.id"
+              >{{ user.surname }} {{ user.name }}</option
+            >
+          </select>
+        </div>
       </form>
     </div>
     <div class="modal-footer">

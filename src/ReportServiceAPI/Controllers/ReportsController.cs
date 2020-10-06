@@ -36,16 +36,16 @@ namespace ReportService.WebApi.Controllers
 		/// <summary>
 		/// Получить список отчетов
 		/// </summary>
-		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов отчетов</returns>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список отчетов</returns>
 		[ProducesResponseType(typeof(Response), 200)]
 		[HttpGet]
 		public async Task<IActionResult> GetReports()
 		{
 			try
 			{
-				var reportIds = await _reportWebService.GetReportIdsAsync();
+				var reports = await _reportWebService.GetReportsAsync();
 				return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reportIds }
+					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = reports }
 				);
 			}
 			catch (TimeoutException)

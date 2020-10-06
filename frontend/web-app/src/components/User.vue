@@ -1,26 +1,17 @@
 <template>
   <tr>
     <td>
-      <div v-if="loading">
-        Loading...
-      </div>
-      <span v-else>
-        {{ user.email }}
-      </span>
+      {{ user.email }}
     </td>
     <td>{{ user.name }}</td>
     <td>{{ user.surname }}</td>
     <td>{{ user.patronymic }}</td>
     <td>
       <div class="actions">
-        <button
-          type="button"
-          class="btn btn-small blue"
-          @click="details"
-        >
+        <button type="button" class="btn btn-small blue" @click="details">
           Подробнее
         </button>
-         <button @click="remove" class="btn btn-small pink">
+        <button @click="remove" class="btn btn-small pink">
           <i class="material-icons">delete</i>
         </button>
       </div>
@@ -30,38 +21,13 @@
 
 <script>
 export default {
-  props: ["userId"],
-  data() {
-    return {
-      user: {},
-      loading: true
-    };
-  },
-  async created() {
-    let response = await fetch(
-      "https://localhost:44375/api/users/" + this.userId.id
-    );
-    let json = await response.json();
-    if (json.ok) {
-      this.user = json.object;
-      this.loading = false;
-    }
-  },
+  props: ["user"],
   methods: {
     details() {
       this.$emit("open-modal", this.user.id);
     },
     async remove() {
-      let response = await fetch("https://localhost:44375/api/users/" + this.user.id + "/delete", {
-			 method: "POST",
-			 headers: {
-            "Content-Type": "application/json;charset=utf-8"
-          }
-		 })
-		 let json = await response.json();
-		 if (json.ok) {
-			 this.$emit('remove', this.user.id);
-		 }
+      this.$store.dispatch("removeUser", this.user.id);
     }
   }
 };

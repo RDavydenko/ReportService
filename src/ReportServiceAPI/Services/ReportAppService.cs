@@ -27,12 +27,12 @@ namespace ReportService.WebApi.Services
 			_mapper = mapper;
 		}
 
-		public async Task<IEnumerable<IdDTO>> GetReportIdsAsync()
+		public async Task<IEnumerable<ReportDTO>> GetReportsAsync()
 		{
 			try
 			{
 				var reports = await _db.Reports.AsNoTracking().ToListAsync();
-				var reportsDTO = _mapper.Map<IEnumerable<IdDTO>>(reports);
+				var reportsDTO = _mapper.Map<IEnumerable<ReportDTO>>(reports);
 				return reportsDTO;
 			}
 			catch

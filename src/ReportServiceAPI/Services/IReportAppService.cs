@@ -13,10 +13,10 @@ namespace ReportService.WebApi.Services
 	public interface IReportAppService
 	{
 		/// <summary>
-		/// Возвращает список идентификаторов отчетов
+		/// Возвращает список отчетов
 		/// </summary>
-		/// <returns>Список идентификаторов отчетов</returns>
-		Task<IEnumerable<IdDTO>> GetReportIdsAsync();
+		/// <returns>Список отчетов</returns>
+		Task<IEnumerable<ReportDTO>> GetReportsAsync();
 
 		/// <summary>
 		/// Получить детальную информацию об отчете

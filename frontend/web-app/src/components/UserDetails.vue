@@ -61,42 +61,22 @@ export default {
   },
   methods: {
     async saveChanges() {
-      let response;
+      let answer;
       if (this.mode === "change") {
-        response = await fetch(
-          "https://localhost:44375/api/users/" + this.user.id + "/edit",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json;charset=utf-8"
-            },
-            body: JSON.stringify(this.user)
-          }
-        );
+        answer = await this.$store.dispatch("updateUser", this.user);
       }
-      
       if (this.mode === "create") {
-        response = await fetch("https://localhost:44375/api/users/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=utf-8"
-          },
-          body: JSON.stringify(this.user)
-        });
+        answer = await this.$store.dispatch("createUser", this.user);
       }
 
       this.message.display = true;
-      if (response.ok) {
-        let json = await response.json();
-        this.message.text = json.description;
-        if (json.ok) {
-          this.message.type = "success";
-          this.user = json.object;
-        } else {
-          this.message.type = "error";
-        }
+      if (answer.ok) {
+        this.message.text = answer.description;
+        this.message.type = "success";
       } else {
-        this.message.text = "Ошибка!";
+        if (this.message.text.length == 0) {
+          this.message.text = "Ошибка!"
+        }
         this.message.type = "error";
       }
     }
@@ -106,6 +86,6 @@ export default {
   }
 };
 </script>
-	
+
 <style scoped>
 </style>

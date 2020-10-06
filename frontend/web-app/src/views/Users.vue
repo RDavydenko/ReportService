@@ -26,9 +26,9 @@
       </thead>
       <tbody>
         <User
-          v-for="(user, index) in userIdx"
+          v-for="(user, index) in users"
           :key="index"
-          :userId="user"          
+          :user="user"
           @open-modal="openModal"
         />
       </tbody>
@@ -43,7 +43,6 @@ import UserDetails from "@/components/UserDetails";
 export default {
   data() {
     return {
-      userIdx: [],
       modal: {
         modalShow: false,
         currentModalUser: 0,
@@ -51,14 +50,13 @@ export default {
       }
     };
   },
-  async mounted() {
-    let response = await fetch("https://localhost:44375/api/users");
-    let json = await response.json();
-    if (json.ok) {
-      this.userIdx = json.object;
-    } else {
-      // TODO: добавить сообщение об ошибке
+  computed: {
+    users() {
+      return this.$store.getters.users;
     }
+  },
+  async mounted() {
+    this.$store.dispatch("fetchUsers");
   },
   methods: {
     openModal(id) {

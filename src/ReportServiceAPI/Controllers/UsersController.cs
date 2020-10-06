@@ -36,16 +36,16 @@ namespace ReportService.WebApi.Controllers
 		/// <summary>
 		/// Получить список пользователей
 		/// </summary>
-		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список идентификаторов пользователей</returns>
+		/// <returns><see cref="Response"/> с <see cref="Response.Object"/> = список пользователей</returns>
 		[ProducesResponseType(typeof(Response), 200)]
 		[HttpGet]
 		public async Task<IActionResult> GetUsers()
 		{
 			try
 			{
-				var usersIds = await _userWebService.GetUsersIdsAsync();
+				var users = await _userWebService.GetUsersAsync();
 				return new JsonResult(
-					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = usersIds }
+					new Response { Ok = true, StatusCode = 200, Description = "Успешно", Object = users }
 				);
 			}
 			catch (TimeoutException)

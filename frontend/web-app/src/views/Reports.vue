@@ -1,9 +1,7 @@
 <template>
   <div>
     <div class="menu">
-      <button class="btn green"
-        @click="addReport"
-      >
+      <button class="btn green" @click="addReport">
         Добавить<i class="left material-icons">add</i>
       </button>
     </div>
@@ -54,6 +52,7 @@ export default {
       }
     };
   },
+  
   async created() {
     let response = await fetch("https://localhost:44375/api/reports")
     let json = await response.json()
@@ -61,6 +60,7 @@ export default {
       this.reportIdx = json.object
     }
   },
+  
   methods: {
     openModal(id) {
       this.modal.mode = 'change'
@@ -84,8 +84,8 @@ export default {
 </script>
 
 <style scoped>
-  .menu {
-    float: right;
-    margin-top: 20px;
-  }
+.menu {
+  float: right;
+  margin-top: 20px;
+}
 </style>

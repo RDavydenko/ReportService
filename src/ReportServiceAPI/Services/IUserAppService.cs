@@ -13,10 +13,10 @@ namespace ReportService.WebApi.Services
 	public interface IUserAppService
 	{
 		/// <summary>
-		/// Возвращает список идентификаторов пользователей
+		/// Возвращает список пользователей
 		/// </summary>
-		/// <returns>Список идентификаторов пользователей</returns>
-		Task<IEnumerable<IdDTO>> GetUsersIdsAsync();
+		/// <returns>Список пользователей</returns>
+		Task<IEnumerable<UserDTO>> GetUsersAsync();
 
 		/// <summary>
 		/// Возвращает детальную информацию о пользователе
