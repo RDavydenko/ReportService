@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,9 +36,9 @@ namespace ReportServiceAPI
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			string connection = Configuration.GetConnectionString("DefaultConnection"); // строка подключения к БД Postgres
+			string connection = Configuration.GetConnectionString("DefaultConnection"); // СЃС‚СЂРѕРєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє Р‘Р” Postgres
 
-			// Добавляем DB контекст
+			// Р”РѕР±Р°РІР»СЏРµРј DB РєРѕРЅС‚РµРєСЃС‚
 			services.AddDbContext<ServiceDbContext>(builder =>
 			{
 				// Postrgres
@@ -58,17 +58,17 @@ namespace ReportServiceAPI
 				{
 					Version = "v1",
 					Title = "ReportServiceAPI",
-					Description = "REST API сервис для учета отработанного времени.",
+					Description = "REST API СЃРµСЂРІРёСЃ РґР»СЏ СѓС‡РµС‚Р° РѕС‚СЂР°Р±РѕС‚Р°РЅРЅРѕРіРѕ РІСЂРµРјРµРЅРё.",
 
 				});
 
-				// Добавляем xml комментарии из документации
+				// Р”РѕР±Р°РІР»СЏРµРј xml РєРѕРјРјРµРЅС‚Р°СЂРёРё РёР· РґРѕРєСѓРјРµРЅС‚Р°С†РёРё
 				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 				opt.IncludeXmlComments(xmlPath);
 			});
 
-			// Добавляем IMapper
+			// Р”РѕР±Р°РІР»СЏРµРј IMapper
 			var mapperConfig = new MapperConfiguration(mc =>
 			{
 				mc.AddProfile<UserMappingProfile>();
@@ -77,10 +77,10 @@ namespace ReportServiceAPI
 			IMapper mapper = mapperConfig.CreateMapper();
 			services.AddSingleton(mapper);
 
-			// Добавляем webService, работающий с пользователями
+			// Р”РѕР±Р°РІР»СЏРµРј webService, СЂР°Р±РѕС‚Р°СЋС‰РёР№ СЃ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРјРё
 			services.AddScoped<IUserAppService, UserAppService>();
 
-			// Добавляем webService, работающий с отчетами
+			// Р”РѕР±Р°РІР»СЏРµРј webService, СЂР°Р±РѕС‚Р°СЋС‰РёР№ СЃ РѕС‚С‡РµС‚Р°РјРё
 			services.AddScoped<IReportAppService, ReportAppService>();
 		}
 
@@ -101,7 +101,7 @@ namespace ReportServiceAPI
 
 			app.UseSwagger(opt =>
 			{
-				// Версия json 2.0 для корректной работы
+				// Р’РµСЂСЃРёСЏ json 2.0 РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚С‹
 				opt.SerializeAsV2 = true;
 			});
 			app.UseSwaggerUI(opt =>
@@ -109,12 +109,12 @@ namespace ReportServiceAPI
 				opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
 			});
 
-			// Файловый сервер к документации Redoc
+			// Р¤Р°Р№Р»РѕРІС‹Р№ СЃРµСЂРІРµСЂ Рє РґРѕРєСѓРјРµРЅС‚Р°С†РёРё Redoc
 			app.UseFileServer(new FileServerOptions()
 			{
 				FileProvider = new PhysicalFileProvider(
-					Path.Combine(Directory.GetCurrentDirectory(), "redoc")), // Папка redoc
-				RequestPath = "", // При запросе по ссылке: /
+					Path.Combine(Directory.GetCurrentDirectory(), "redoc")), // РџР°РїРєР° redoc
+				RequestPath = "", // РџСЂРё Р·Р°РїСЂРѕСЃРµ РїРѕ СЃСЃС‹Р»РєРµ: /
 				EnableDefaultFiles = true
 			});
 

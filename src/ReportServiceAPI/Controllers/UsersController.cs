@@ -27,10 +27,12 @@ namespace ReportService.WebApi.Controllers
 	public class UsersController : Controller
 	{
 		private readonly IUserAppService _userWebService;
+		private readonly ILogger<UsersController> _logger;
 
-		public UsersController(IUserAppService userWebService)
+		public UsersController(IUserAppService userWebService, ILogger<UsersController> logger)
 		{
 			_userWebService = userWebService;
+			_logger = logger;		
 		}
 
 		/// <summary>
